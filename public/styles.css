@@ -74,6 +74,10 @@ a {
   min-height: 100vh;
 }
 
+.app-shell.menu-hidden {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .sidebar {
   position: sticky;
   top: 0;
@@ -168,6 +172,10 @@ a {
 
 .sidebar-command {
   width: 100%;
+}
+
+.sidebar-wide-command {
+  grid-column: 1 / -1;
 }
 
 .sync-panel {

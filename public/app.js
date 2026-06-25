@@ -87,7 +87,7 @@ function ServiceIcon({ service, size = "normal" }) {
   );
 }
 
-function Sidebar({ pages, activePageId, setActivePageId, syncStatus, onSyncNow, onNewPage, theme, setTheme }) {
+function Sidebar({ pages, activePageId, setActivePageId, syncStatus, onSyncNow, onNewPage, theme, setTheme, onHideMenu }) {
   return h(
     "aside",
     { className: "sidebar", "aria-label": "Pages" },
@@ -110,6 +110,15 @@ function Sidebar({ pages, activePageId, setActivePageId, syncStatus, onSyncNow, 
           onClick: () => setTheme(theme === "dark" ? "light" : "dark")
         },
         theme === "dark" ? "Dark mode" : "Light mode"
+      ),
+      h(
+        "button",
+        {
+          className: "ghost sidebar-command sidebar-wide-command",
+          type: "button",
+          onClick: onHideMenu
+        },
+        "Hide menu"
       )
     ),
     h(
@@ -144,7 +153,7 @@ function Sidebar({ pages, activePageId, setActivePageId, syncStatus, onSyncNow, 
   );
 }
 
-function Topbar({ page, countText, query, setQuery, onAddService, displayMode, setDisplayMode }) {
+function Topbar({ page, countText, query, setQuery, onAddService, displayMode, setDisplayMode, menuHidden, onShowMenu }) {
   return h(
     "header",
     { className: "topbar" },
@@ -157,6 +166,7 @@ function Topbar({ page, countText, query, setQuery, onAddService, displayMode, s
     h(
       "div",
       { className: "actions" },
+      menuHidden && h("button", { className: "ghost", type: "button", onClick: onShowMenu }, "Show menu"),
       h(
         "label",
         { className: "search" },
@@ -412,6 +422,7 @@ function App() {
   const [query, setQuery] = useState("");
   const [theme, setThemeState] = useState(() => localStorage.getItem("landingpage-theme") || "dark");
   const [displayMode, setDisplayModeState] = useState(() => localStorage.getItem("landingpage-display-mode") || "cards");
+  const [menuHidden, setMenuHiddenState] = useState(() => localStorage.getItem("landingpage-menu-hidden") === "true");
   const [syncStatus, setSyncStatus] = useState({ enabled: true, running: false, lastMessage: "Loading" });
   const [serviceModal, setServiceModal] = useState(null);
   const [pageModalOpen, setPageModalOpen] = useState(false);
@@ -434,6 +445,10 @@ function App() {
   useEffect(() => {
     localStorage.setItem("landingpage-display-mode", displayMode);
   }, [displayMode]);
+
+  useEffect(() => {
+    localStorage.setItem("landingpage-menu-hidden", String(menuHidden));
+  }, [menuHidden]);
 
   useEffect(() => {
     async function refreshSyncStatus() {
@@ -483,6 +498,10 @@ function App() {
     setDisplayModeState(nextMode);
   }
 
+  function setMenuHidden(nextHidden) {
+    setMenuHiddenState(nextHidden);
+  }
+
   function onCatalogSaved(nextCatalog) {
     setCatalog(nextCatalog);
     setServiceModal(null);
@@ -505,17 +524,19 @@ function App() {
     null,
     h(
       "div",
-      { className: "app-shell" },
-      h(Sidebar, {
-        pages: catalog.pages,
-        activePageId: activePage.id,
-        setActivePageId,
-        syncStatus,
-        onSyncNow: syncNow,
-        onNewPage: () => setPageModalOpen(true),
-        theme,
-        setTheme
-      }),
+      { className: menuHidden ? "app-shell menu-hidden" : "app-shell" },
+      !menuHidden &&
+        h(Sidebar, {
+          pages: catalog.pages,
+          activePageId: activePage.id,
+          setActivePageId,
+          syncStatus,
+          onSyncNow: syncNow,
+          onNewPage: () => setPageModalOpen(true),
+          theme,
+          setTheme,
+          onHideMenu: () => setMenuHidden(true)
+        }),
       h(
         "main",
         { className: "workspace" },
@@ -526,7 +547,9 @@ function App() {
           setQuery,
           onAddService: () => setServiceModal({ service: null, pageId: activePage.id }),
           displayMode,
-          setDisplayMode
+          setDisplayMode,
+          menuHidden,
+          onShowMenu: () => setMenuHidden(false)
         }),
         h(QuickStrip, { services: activePage.services }),
         h(ServiceGrid, {
