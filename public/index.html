@@ -1,93 +1,14 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark light">
     <title>Landingpage</title>
     <link rel="stylesheet" href="/styles.css">
   </head>
   <body>
-    <div class="app-shell">
-      <aside class="sidebar" aria-label="Pages">
-        <div class="brand">
-          <span class="brand-mark">L</span>
-          <div>
-            <strong>Landingpage</strong>
-            <span>Homelab services</span>
-          </div>
-        </div>
-        <button class="new-page-button" id="newPageButton" type="button">+ Page</button>
-        <button class="theme-button" id="themeToggle" type="button" aria-pressed="true">Dark</button>
-        <div class="sync-panel">
-          <div>
-            <strong>Git Sync</strong>
-            <span id="syncStatus">Waiting</span>
-          </div>
-          <button id="syncNowButton" type="button">Sync</button>
-        </div>
-        <nav class="page-nav" id="pageNav"></nav>
-      </aside>
-
-      <main class="workspace">
-        <header class="topbar">
-          <div>
-            <p class="eyebrow" id="serviceCount">Services</p>
-            <h1 id="pageTitle">Loading</h1>
-          </div>
-          <div class="actions">
-            <label class="search">
-              <span>Search</span>
-              <input id="searchInput" type="search" placeholder="Find a service">
-            </label>
-            <button class="primary" id="addServiceButton" type="button">+ Service</button>
-          </div>
-        </header>
-
-        <section class="quick-strip" id="quickStrip" aria-label="Quick links"></section>
-        <section class="service-grid" id="serviceGrid"></section>
-      </main>
-    </div>
-
-    <dialog class="modal" id="serviceDialog">
-      <form id="serviceForm" method="dialog">
-        <div class="modal-header">
-          <h2 id="serviceDialogTitle">Add service</h2>
-          <button class="icon-button" type="button" data-close-dialog aria-label="Close">x</button>
-        </div>
-        <input type="hidden" id="serviceId">
-        <label>Name<input id="serviceName" required autocomplete="off"></label>
-        <label>URL<input id="serviceHref" required type="url" placeholder="https://"></label>
-        <label>Description<textarea id="serviceDescription" rows="3"></textarea></label>
-        <label>Category<input id="serviceCategory" placeholder="Storage, media, monitoring"></label>
-        <label>Search metadata<textarea id="serviceKeywords" rows="3" placeholder="Aliases, tags, search terms"></textarea></label>
-        <label>Notes<textarea id="serviceNotes" rows="2" placeholder="Optional internal context for search"></textarea></label>
-        <label>Icon<input id="serviceIcon" placeholder="plex.png or https://..."></label>
-        <label>Widget type<input id="serviceWidget" placeholder="plex, pihole, proxmox"></label>
-        <div class="modal-actions">
-          <button class="danger" id="deleteServiceButton" type="button">Delete</button>
-          <span></span>
-          <button type="button" data-close-dialog>Cancel</button>
-          <button class="primary" type="submit">Save</button>
-        </div>
-      </form>
-    </dialog>
-
-    <dialog class="modal compact" id="pageDialog">
-      <form id="pageForm" method="dialog">
-        <div class="modal-header">
-          <h2>New page</h2>
-          <button class="icon-button" type="button" data-close-dialog aria-label="Close">x</button>
-        </div>
-        <label>Name<input id="pageName" required autocomplete="off" placeholder="Microsoft"></label>
-        <label>Description<textarea id="pageDescription" rows="2"></textarea></label>
-        <div class="modal-actions">
-          <span></span>
-          <button type="button" data-close-dialog>Cancel</button>
-          <button class="primary" type="submit">Create</button>
-        </div>
-      </form>
-    </dialog>
-
-    <script src="/app.js" type="module"></script>
+    <div id="root"></div>
+    <script type="module" src="/app.js"></script>
   </body>
 </html>

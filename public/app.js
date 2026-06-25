@@ -1,41 +1,7 @@
-const state = {
-  catalog: null,
-  activePageId: null,
-  query: "",
-  editingService: null,
-  editingPageId: null
-};
+import React, { useEffect, useMemo, useState } from "https://esm.sh/react@18.3.1";
+import { createRoot } from "https://esm.sh/react-dom@18.3.1/client";
 
-const els = {
-  pageNav: document.querySelector("#pageNav"),
-  pageTitle: document.querySelector("#pageTitle"),
-  serviceCount: document.querySelector("#serviceCount"),
-  serviceGrid: document.querySelector("#serviceGrid"),
-  quickStrip: document.querySelector("#quickStrip"),
-  searchInput: document.querySelector("#searchInput"),
-  addServiceButton: document.querySelector("#addServiceButton"),
-  newPageButton: document.querySelector("#newPageButton"),
-  themeToggle: document.querySelector("#themeToggle"),
-  syncStatus: document.querySelector("#syncStatus"),
-  syncNowButton: document.querySelector("#syncNowButton"),
-  serviceDialog: document.querySelector("#serviceDialog"),
-  serviceDialogTitle: document.querySelector("#serviceDialogTitle"),
-  serviceForm: document.querySelector("#serviceForm"),
-  serviceId: document.querySelector("#serviceId"),
-  serviceName: document.querySelector("#serviceName"),
-  serviceHref: document.querySelector("#serviceHref"),
-  serviceDescription: document.querySelector("#serviceDescription"),
-  serviceCategory: document.querySelector("#serviceCategory"),
-  serviceKeywords: document.querySelector("#serviceKeywords"),
-  serviceNotes: document.querySelector("#serviceNotes"),
-  serviceIcon: document.querySelector("#serviceIcon"),
-  serviceWidget: document.querySelector("#serviceWidget"),
-  deleteServiceButton: document.querySelector("#deleteServiceButton"),
-  pageDialog: document.querySelector("#pageDialog"),
-  pageForm: document.querySelector("#pageForm"),
-  pageName: document.querySelector("#pageName"),
-  pageDescription: document.querySelector("#pageDescription")
-};
+const h = React.createElement;
 
 async function api(path, options = {}) {
   const response = await fetch(path, {
@@ -47,8 +13,21 @@ async function api(path, options = {}) {
   return data;
 }
 
-function activePage() {
-  return state.catalog.pages.find((page) => page.id === state.activePageId) || state.catalog.pages[0];
+function iconUrl(icon) {
+  if (!icon) return "";
+  if (icon.startsWith("http")) return icon;
+  if (icon.includes("/") || icon.startsWith("mdi-")) return "";
+  return `https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/${icon}`;
+}
+
+function fallbackLetters(name) {
+  return String(name || "")
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase();
 }
 
 function serviceSearchText(service, page) {
@@ -69,134 +48,6 @@ function serviceSearchText(service, page) {
     .toLowerCase();
 }
 
-function visibleServices(page) {
-  const query = state.query.trim().toLowerCase();
-  if (!query) return page.services;
-  return state.catalog.pages.flatMap((candidatePage) => {
-    return candidatePage.services
-      .filter((service) => serviceSearchText(service, candidatePage).includes(query))
-      .map((service) => ({ ...service, pageId: candidatePage.id, pageName: candidatePage.name }));
-  });
-}
-
-function iconUrl(icon) {
-  if (!icon) return "";
-  if (icon.startsWith("http")) return icon;
-  if (icon.includes("/") || icon.startsWith("mdi-")) return "";
-  return `https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/${icon}`;
-}
-
-function escapeHtml(value) {
-  return String(value ?? "").replace(/[&<>"']/g, (char) => {
-    return {
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      "\"": "&quot;",
-      "'": "&#39;"
-    }[char];
-  });
-}
-
-function escapeAttribute(value) {
-  return escapeHtml(value).replace(/`/g, "&#96;");
-}
-
-function fallbackLetters(name) {
-  return name
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0])
-    .join("")
-    .toUpperCase();
-}
-
-function renderIcon(service) {
-  const url = iconUrl(service.icon || "");
-  const letters = escapeHtml(fallbackLetters(service.name));
-  if (url) {
-    return `<img src="${escapeAttribute(url)}" alt="" loading="lazy" data-fallback="${letters}">`;
-  }
-  return `<span class="service-fallback">${letters}</span>`;
-}
-
-function renderPages() {
-  els.pageNav.innerHTML = state.catalog.pages
-    .map((page) => {
-      const total = page.services.length;
-      const active = page.id === state.activePageId ? "active" : "";
-      return `<button class="${active}" type="button" data-page-id="${escapeAttribute(page.id)}">
-        <span>${escapeHtml(page.name)}</span>
-        <small>${total}</small>
-      </button>`;
-    })
-    .join("");
-}
-
-function renderQuickStrip(page) {
-  els.quickStrip.innerHTML = page.services
-    .slice(0, 8)
-    .map((service) => `<a href="${escapeAttribute(service.href)}" target="_blank" rel="noreferrer">${renderIcon(service)}<span>${escapeHtml(service.name)}</span></a>`)
-    .join("");
-}
-
-function renderServices(page) {
-  const services = visibleServices(page);
-  els.serviceGrid.innerHTML = services
-    .map((service) => {
-      return `<article class="service-card">
-        <div class="service-top">
-          <a class="service-icon" href="${escapeAttribute(service.href)}" target="_blank" rel="noreferrer">${renderIcon(service)}</a>
-          <button class="card-edit" type="button" data-page-id="${escapeAttribute(service.pageId || page.id)}" data-service-id="${escapeAttribute(service.id)}">Edit</button>
-        </div>
-        <h2><a href="${escapeAttribute(service.href)}" target="_blank" rel="noreferrer">${escapeHtml(service.name)}</a></h2>
-        <p>${escapeHtml(service.description || "No description yet.")}</p>
-      </article>`;
-    })
-    .join("");
-
-  if (!services.length) {
-    els.serviceGrid.innerHTML = `<div class="empty-state">
-      <h2>No services found</h2>
-      <p>Add a service or adjust the current search.</p>
-    </div>`;
-  }
-}
-
-document.addEventListener(
-  "error",
-  (event) => {
-    const image = event.target;
-    if (!(image instanceof HTMLImageElement) || !image.dataset.fallback) return;
-    const fallback = document.createElement("span");
-    fallback.className = "service-fallback";
-    fallback.textContent = image.dataset.fallback;
-    image.replaceWith(fallback);
-  },
-  true
-);
-
-function render() {
-  const page = activePage();
-  state.activePageId = page.id;
-  const services = visibleServices(page);
-  document.title = `${page.name} - Landingpage`;
-  els.pageTitle.textContent = page.name;
-  els.serviceCount.textContent = state.query
-    ? `${services.length} global matches`
-    : `${services.length} of ${page.services.length} services`;
-  renderPages();
-  renderQuickStrip(page);
-  renderServices(page);
-}
-
-async function loadCatalog() {
-  state.catalog = await api("/api/catalog");
-  state.activePageId = state.catalog.pages[0]?.id;
-  render();
-}
-
 function formatSyncStatus(status) {
   if (!status.enabled) return "Disabled";
   if (status.running) return "Running";
@@ -207,154 +58,418 @@ function formatSyncStatus(status) {
   return "Every 15 min";
 }
 
-async function refreshSyncStatus() {
-  try {
-    const status = await api("/api/sync/status");
-    els.syncStatus.textContent = formatSyncStatus(status);
-    els.syncStatus.title = status.lastError || status.lastMessage || "";
-  } catch (error) {
-    els.syncStatus.textContent = "Unavailable";
-    els.syncStatus.title = error.message;
+function splitKeywords(value) {
+  return String(value || "")
+    .split(/[\n,]+/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function ServiceIcon({ service, size = "normal" }) {
+  const [failed, setFailed] = useState(false);
+  const url = iconUrl(service.icon || "");
+  const className = size === "small" ? "service-icon service-icon-small" : "service-icon";
+
+  return h(
+    "span",
+    { className },
+    url && !failed
+      ? h("img", {
+          src: url,
+          alt: "",
+          loading: "lazy",
+          onError: () => setFailed(true)
+        })
+      : h("span", { className: "service-fallback" }, fallbackLetters(service.name))
+  );
+}
+
+function Sidebar({ pages, activePageId, setActivePageId, syncStatus, onSyncNow, onNewPage, theme, setTheme }) {
+  return h(
+    "aside",
+    { className: "sidebar", "aria-label": "Pages" },
+    h(
+      "div",
+      { className: "brand" },
+      h("span", { className: "brand-mark" }, "L"),
+      h("div", null, h("strong", null, "Landingpage"), h("span", null, "Homelab services"))
+    ),
+    h(
+      "div",
+      { className: "sidebar-actions" },
+      h("button", { className: "primary sidebar-command", type: "button", onClick: onNewPage }, "New page"),
+      h(
+        "button",
+        {
+          className: "ghost sidebar-command",
+          type: "button",
+          "aria-pressed": theme === "dark",
+          onClick: () => setTheme(theme === "dark" ? "light" : "dark")
+        },
+        theme === "dark" ? "Dark mode" : "Light mode"
+      )
+    ),
+    h(
+      "div",
+      { className: "sync-panel" },
+      h("div", null, h("strong", null, "Git Sync"), h("span", { title: syncStatus.lastError || syncStatus.lastMessage || "" }, formatSyncStatus(syncStatus))),
+      h("button", { type: "button", disabled: syncStatus.running, onClick: onSyncNow }, "Sync")
+    ),
+    h(
+      "nav",
+      { className: "page-nav" },
+      pages.map((page) =>
+        h(
+          "button",
+          {
+            key: page.id,
+            className: page.id === activePageId ? "active" : "",
+            type: "button",
+            onClick: () => setActivePageId(page.id)
+          },
+          h("span", null, page.name),
+          h("small", null, page.services.length)
+        )
+      )
+    )
+  );
+}
+
+function Topbar({ page, countText, query, setQuery, onAddService }) {
+  return h(
+    "header",
+    { className: "topbar" },
+    h(
+      "div",
+      { className: "title-block" },
+      h("p", { className: "eyebrow" }, countText),
+      h("h1", null, page?.name || "Landingpage")
+    ),
+    h(
+      "div",
+      { className: "actions" },
+      h(
+        "label",
+        { className: "search" },
+        h("span", null, "Search"),
+        h("input", {
+          type: "search",
+          placeholder: "Find a service",
+          value: query,
+          onChange: (event) => setQuery(event.target.value)
+        })
+      ),
+      h("button", { className: "primary", type: "button", onClick: onAddService }, "Add service")
+    )
+  );
+}
+
+function QuickStrip({ services }) {
+  return h(
+    "section",
+    { className: "quick-strip", "aria-label": "Quick links" },
+    services.slice(0, 8).map((service) =>
+      h(
+        "a",
+        { key: service.id, href: service.href, target: "_blank", rel: "noreferrer" },
+        h(ServiceIcon, { service, size: "small" }),
+        h("span", null, service.name)
+      )
+    )
+  );
+}
+
+function ServiceCard({ service, pageId, onEdit }) {
+  return h(
+    "article",
+    { className: "service-card" },
+    h(
+      "div",
+      { className: "service-top" },
+      h("a", { href: service.href, target: "_blank", rel: "noreferrer", "aria-label": `Open ${service.name}` }, h(ServiceIcon, { service })),
+      h("button", { className: "card-edit", type: "button", onClick: () => onEdit(service, pageId) }, "Edit")
+    ),
+    h("h2", null, h("a", { href: service.href, target: "_blank", rel: "noreferrer" }, service.name)),
+    h("p", null, service.description || "No description yet.")
+  );
+}
+
+function ServiceGrid({ services, activePage, query, onEdit }) {
+  if (!services.length) {
+    return h(
+      "section",
+      { className: "service-grid" },
+      h("div", { className: "empty-state" }, h("h2", null, "No services found"), h("p", null, "Add a service or adjust the current search."))
+    );
   }
+
+  return h(
+    "section",
+    { className: "service-grid" },
+    services.map((service) =>
+      h(ServiceCard, {
+        key: `${service.pageId || activePage.id}-${service.id}`,
+        service,
+        pageId: service.pageId || activePage.id,
+        query,
+        onEdit
+      })
+    )
+  );
 }
 
-function openServiceDialog(service = null, pageId = null) {
-  state.editingService = service;
-  state.editingPageId = pageId || state.activePageId;
-  els.serviceDialogTitle.textContent = service ? "Edit service" : "Add service";
-  els.deleteServiceButton.hidden = !service;
-  els.serviceId.value = service?.id || "";
-  els.serviceName.value = service?.name || "";
-  els.serviceHref.value = service?.href || "";
-  els.serviceDescription.value = service?.description || "";
-  els.serviceCategory.value = service?.category || "";
-  els.serviceKeywords.value = (service?.keywords || []).join("\n");
-  els.serviceNotes.value = service?.notes || "";
-  els.serviceIcon.value = service?.icon || "";
-  els.serviceWidget.value = service?.widgetType || "";
-  els.serviceDialog.showModal();
-  els.serviceName.focus();
+function Modal({ title, children, onClose, className = "" }) {
+  return h(
+    "div",
+    { className: "modal-backdrop", role: "presentation", onMouseDown: onClose },
+    h(
+      "section",
+      {
+        className: `modal ${className}`,
+        role: "dialog",
+        "aria-modal": "true",
+        "aria-label": title,
+        onMouseDown: (event) => event.stopPropagation()
+      },
+      h(
+        "div",
+        { className: "modal-header" },
+        h("h2", null, title),
+        h("button", { className: "icon-button", type: "button", onClick: onClose, "aria-label": "Close" }, "x")
+      ),
+      children
+    )
+  );
 }
 
-function closeDialogs() {
-  document.querySelectorAll("dialog[open]").forEach((dialog) => dialog.close());
+function ServiceModal({ page, editing, onClose, onSaved }) {
+  const [form, setForm] = useState(() => ({
+    name: editing?.service?.name || "",
+    href: editing?.service?.href || "",
+    description: editing?.service?.description || "",
+    category: editing?.service?.category || "",
+    keywords: (editing?.service?.keywords || []).join("\n"),
+    notes: editing?.service?.notes || "",
+    icon: editing?.service?.icon || "",
+    widgetType: editing?.service?.widgetType || ""
+  }));
+  const [saving, setSaving] = useState(false);
+  const service = editing?.service;
+  const pageId = editing?.pageId || page.id;
+
+  function update(field, value) {
+    setForm((current) => ({ ...current, [field]: value }));
+  }
+
+  async function submit(event) {
+    event.preventDefault();
+    setSaving(true);
+    const payload = {
+      ...form,
+      keywords: splitKeywords(form.keywords),
+      tags: [page.name]
+    };
+    const path = service?.id ? `/api/pages/${pageId}/services/${service.id}` : `/api/pages/${pageId}/services`;
+    const catalog = await api(path, {
+      method: service?.id ? "PUT" : "POST",
+      body: JSON.stringify(payload)
+    });
+    onSaved(catalog);
+  }
+
+  async function deleteService() {
+    if (!service?.id) return;
+    setSaving(true);
+    const catalog = await api(`/api/pages/${pageId}/services/${service.id}`, { method: "DELETE" });
+    onSaved(catalog);
+  }
+
+  return h(
+    Modal,
+    { title: service ? "Edit service" : "Add service", onClose },
+    h(
+      "form",
+      { className: "modal-form", onSubmit: submit },
+      h("label", null, "Name", h("input", { required: true, value: form.name, onChange: (event) => update("name", event.target.value), autoFocus: true })),
+      h("label", null, "URL", h("input", { required: true, type: "url", placeholder: "https://", value: form.href, onChange: (event) => update("href", event.target.value) })),
+      h("label", null, "Description", h("textarea", { rows: 3, value: form.description, onChange: (event) => update("description", event.target.value) })),
+      h("label", null, "Category", h("input", { placeholder: "Storage, media, monitoring", value: form.category, onChange: (event) => update("category", event.target.value) })),
+      h("label", null, "Search metadata", h("textarea", { rows: 3, placeholder: "Aliases, tags, search terms", value: form.keywords, onChange: (event) => update("keywords", event.target.value) })),
+      h("label", null, "Notes", h("textarea", { rows: 2, placeholder: "Optional internal context for search", value: form.notes, onChange: (event) => update("notes", event.target.value) })),
+      h("label", null, "Icon", h("input", { placeholder: "plex.png or https://...", value: form.icon, onChange: (event) => update("icon", event.target.value) })),
+      h("label", null, "Widget type", h("input", { placeholder: "plex, pihole, proxmox", value: form.widgetType, onChange: (event) => update("widgetType", event.target.value) })),
+      h(
+        "div",
+        { className: "modal-actions" },
+        service ? h("button", { className: "danger", type: "button", disabled: saving, onClick: deleteService }, "Delete") : h("span", null),
+        h("span", null),
+        h("button", { type: "button", disabled: saving, onClick: onClose }, "Cancel"),
+        h("button", { className: "primary", type: "submit", disabled: saving }, saving ? "Saving" : "Save")
+      )
+    )
+  );
 }
 
-els.pageNav.addEventListener("click", (event) => {
-  const button = event.target.closest("[data-page-id]");
-  if (!button) return;
-  state.activePageId = button.dataset.pageId;
-  render();
-});
+function PageModal({ onClose, onSaved }) {
+  const [form, setForm] = useState({ name: "", description: "" });
+  const [saving, setSaving] = useState(false);
 
-els.searchInput.addEventListener("input", (event) => {
-  state.query = event.target.value;
-  render();
-});
+  async function submit(event) {
+    event.preventDefault();
+    setSaving(true);
+    const catalog = await api("/api/pages", {
+      method: "POST",
+      body: JSON.stringify(form)
+    });
+    onSaved(catalog);
+  }
 
-els.addServiceButton.addEventListener("click", () => openServiceDialog());
-els.newPageButton.addEventListener("click", () => {
-  els.pageForm.reset();
-  els.pageDialog.showModal();
-  els.pageName.focus();
-});
+  return h(
+    Modal,
+    { title: "New page", onClose, className: "compact" },
+    h(
+      "form",
+      { className: "modal-form", onSubmit: submit },
+      h("label", null, "Name", h("input", { required: true, placeholder: "Microsoft", value: form.name, autoFocus: true, onChange: (event) => setForm((current) => ({ ...current, name: event.target.value })) })),
+      h("label", null, "Description", h("textarea", { rows: 2, value: form.description, onChange: (event) => setForm((current) => ({ ...current, description: event.target.value })) })),
+      h(
+        "div",
+        { className: "modal-actions compact-actions" },
+        h("span", null),
+        h("button", { type: "button", disabled: saving, onClick: onClose }, "Cancel"),
+        h("button", { className: "primary", type: "submit", disabled: saving }, saving ? "Creating" : "Create")
+      )
+    )
+  );
+}
 
-els.syncNowButton.addEventListener("click", async () => {
-  els.syncNowButton.disabled = true;
-  els.syncStatus.textContent = "Running";
-  try {
+function App() {
+  const [catalog, setCatalog] = useState(null);
+  const [activePageId, setActivePageId] = useState(null);
+  const [query, setQuery] = useState("");
+  const [theme, setThemeState] = useState(() => localStorage.getItem("landingpage-theme") || "dark");
+  const [syncStatus, setSyncStatus] = useState({ enabled: true, running: false, lastMessage: "Loading" });
+  const [serviceModal, setServiceModal] = useState(null);
+  const [pageModalOpen, setPageModalOpen] = useState(false);
+  const [loadError, setLoadError] = useState("");
+
+  useEffect(() => {
+    api("/api/catalog")
+      .then((data) => {
+        setCatalog(data);
+        setActivePageId(data.pages[0]?.id);
+      })
+      .catch((error) => setLoadError(error.message));
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem("landingpage-theme", theme);
+  }, [theme]);
+
+  useEffect(() => {
+    async function refreshSyncStatus() {
+      try {
+        setSyncStatus(await api("/api/sync/status"));
+      } catch (error) {
+        setSyncStatus({ enabled: false, running: false, lastError: error.message });
+      }
+    }
+    refreshSyncStatus();
+    const interval = setInterval(refreshSyncStatus, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const activePage = useMemo(() => {
+    if (!catalog?.pages?.length) return null;
+    return catalog.pages.find((page) => page.id === activePageId) || catalog.pages[0];
+  }, [catalog, activePageId]);
+
+  const visibleServices = useMemo(() => {
+    if (!catalog || !activePage) return [];
+    const normalizedQuery = query.trim().toLowerCase();
+    if (!normalizedQuery) return activePage.services;
+    return catalog.pages.flatMap((page) =>
+      page.services
+        .filter((service) => serviceSearchText(service, page).includes(normalizedQuery))
+        .map((service) => ({ ...service, pageId: page.id, pageName: page.name }))
+    );
+  }, [catalog, activePage, query]);
+
+  useEffect(() => {
+    if (activePage) document.title = `${activePage.name} - Landingpage`;
+  }, [activePage]);
+
+  async function syncNow() {
+    setSyncStatus((current) => ({ ...current, running: true }));
     const status = await api("/api/sync/run", { method: "POST" });
-    els.syncStatus.textContent = formatSyncStatus(status);
-    els.syncStatus.title = status.lastError || status.lastMessage || "";
-    state.catalog = await api("/api/catalog");
-    render();
-  } catch (error) {
-    els.syncStatus.textContent = "Failed";
-    els.syncStatus.title = error.message;
-  } finally {
-    els.syncNowButton.disabled = false;
+    setSyncStatus(status);
+    setCatalog(await api("/api/catalog"));
   }
-});
 
-els.serviceGrid.addEventListener("click", (event) => {
-  const button = event.target.closest("[data-service-id]");
-  if (!button) return;
-  const page = state.catalog.pages.find((item) => item.id === button.dataset.pageId) || activePage();
-  const service = page.services.find((item) => item.id === button.dataset.serviceId);
-  if (service) openServiceDialog(service, page.id);
-});
+  function setTheme(nextTheme) {
+    setThemeState(nextTheme);
+  }
 
-document.addEventListener("click", (event) => {
-  if (event.target.matches("[data-close-dialog]")) closeDialogs();
-});
+  function onCatalogSaved(nextCatalog) {
+    setCatalog(nextCatalog);
+    setServiceModal(null);
+    setPageModalOpen(false);
+    if (!activePageId && nextCatalog.pages[0]) setActivePageId(nextCatalog.pages[0].id);
+  }
 
-els.serviceForm.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  const page = state.catalog.pages.find((item) => item.id === state.editingPageId) || activePage();
-  const service = {
-    name: els.serviceName.value,
-    href: els.serviceHref.value,
-    description: els.serviceDescription.value,
-    category: els.serviceCategory.value,
-    keywords: els.serviceKeywords.value
-      .split(/[\n,]+/)
-      .map((item) => item.trim())
-      .filter(Boolean),
-    notes: els.serviceNotes.value,
-    icon: els.serviceIcon.value,
-    widgetType: els.serviceWidget.value,
-    tags: [page.name]
-  };
-  const id = els.serviceId.value;
-  const path = id ? `/api/pages/${page.id}/services/${id}` : `/api/pages/${page.id}/services`;
-  state.catalog = await api(path, {
-    method: id ? "PUT" : "POST",
-    body: JSON.stringify(service)
-  });
-  closeDialogs();
-  render();
-});
+  if (loadError) {
+    return h("main", { className: "load-state" }, h("h1", null, "Could not load Landingpage"), h("p", null, loadError));
+  }
 
-els.deleteServiceButton.addEventListener("click", async () => {
-  const page = state.catalog.pages.find((item) => item.id === state.editingPageId) || activePage();
-  const id = els.serviceId.value;
-  if (!id) return;
-  state.catalog = await api(`/api/pages/${page.id}/services/${id}`, { method: "DELETE" });
-  closeDialogs();
-  render();
-});
+  if (!catalog || !activePage) {
+    return h("main", { className: "load-state" }, h("div", { className: "loader" }), h("p", null, "Loading services"));
+  }
 
-els.pageForm.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  state.catalog = await api("/api/pages", {
-    method: "POST",
-    body: JSON.stringify({
-      name: els.pageName.value,
-      description: els.pageDescription.value
-    })
-  });
-  state.activePageId = state.catalog.pages.at(-1).id;
-  closeDialogs();
-  render();
-});
+  const countText = query ? `${visibleServices.length} global matches` : `${visibleServices.length} of ${activePage.services.length} services`;
 
-loadCatalog().catch((error) => {
-  els.serviceGrid.innerHTML = `<div class="empty-state"><h2>Could not load catalog</h2><p>${error.message}</p></div>`;
-});
-
-refreshSyncStatus();
-setInterval(refreshSyncStatus, 30000);
-
-function setTheme(theme) {
-  document.documentElement.dataset.theme = theme;
-  localStorage.setItem("landingpage-theme", theme);
-  els.themeToggle.textContent = theme === "dark" ? "Dark" : "Light";
-  els.themeToggle.setAttribute("aria-pressed", String(theme === "dark"));
+  return h(
+    React.Fragment,
+    null,
+    h(
+      "div",
+      { className: "app-shell" },
+      h(Sidebar, {
+        pages: catalog.pages,
+        activePageId: activePage.id,
+        setActivePageId,
+        syncStatus,
+        onSyncNow: syncNow,
+        onNewPage: () => setPageModalOpen(true),
+        theme,
+        setTheme
+      }),
+      h(
+        "main",
+        { className: "workspace" },
+        h(Topbar, {
+          page: activePage,
+          countText,
+          query,
+          setQuery,
+          onAddService: () => setServiceModal({ service: null, pageId: activePage.id })
+        }),
+        h(QuickStrip, { services: activePage.services }),
+        h(ServiceGrid, {
+          services: visibleServices,
+          activePage,
+          query,
+          onEdit: (service, pageId) => setServiceModal({ service, pageId })
+        })
+      )
+    ),
+    serviceModal && h(ServiceModal, { page: activePage, editing: serviceModal, onClose: () => setServiceModal(null), onSaved: onCatalogSaved }),
+    pageModalOpen && h(PageModal, { onClose: () => setPageModalOpen(false), onSaved: (nextCatalog) => {
+      setCatalog(nextCatalog);
+      setActivePageId(nextCatalog.pages.at(-1).id);
+      setPageModalOpen(false);
+    } })
+  );
 }
 
-setTheme(localStorage.getItem("landingpage-theme") || "dark");
-
-els.themeToggle.addEventListener("click", () => {
-  const nextTheme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-  setTheme(nextTheme);
-});
+createRoot(document.querySelector("#root")).render(h(App));

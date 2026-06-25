@@ -4,6 +4,7 @@ Editable homelab landing page inspired by Homepage, seeded from the Ridgeway `se
 
 ## What it does
 
+- Uses a React frontend with a modern dark-first interface.
 - Imports the current Homepage service groups as editable pages.
 - Lets you add, edit, and delete services from the interface.
 - Lets you create new pages for tool collections such as Microsoft, infrastructure, media, or client work.
