@@ -1,0 +1,34 @@
+# For configuration options and examples, please see:
+# https://gethomepage.dev/configs/bookmarks
+- AI:
+    - ChatGPT:
+        - abbr: CG
+          href: https://chatgpt.com
+    - Claude:
+        - abbr: CL
+          href: https://claude.ai
+    - Gemini:
+        - abbr: GM
+          href: https://gemini.google.com/app
+
+- Developer:
+    - Github:
+        - abbr: GH
+          href: https://github.com/
+    - CloudFlare:
+        - abbr: CF
+          href: https://cloudflare.com
+        
+- Social:
+    - Reddit:
+        - abbr: RE
+          href: https://reddit.com/
+
+- Entertainment:
+    - YouTube:
+        - abbr: YT
+          href: https://youtube.com/
+- Work:
+    - BrightPay:
+        - abbr: BP
+          href: https://brightpay.cloud/EmployeeLogin/LBavLxpZ7QLTSjw-k8nUIu51JfjXcDZpqd3oYVkozWqst9gjVAwfqCFYxhkIWlWLWDPFt7SwSdDYNQUxO3WkD0YL4tXjb1CXmxTfiyU_7Omm1FaRIWAsg3af4P-oDFQW0

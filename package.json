@@ -1,0 +1,14 @@
+{
+  "name": "landingpage",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Editable homelab landing page inspired by Homepage.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

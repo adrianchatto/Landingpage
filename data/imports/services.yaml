@@ -1,0 +1,295 @@
+# For configuration options and examples, please see:
+# https://gethomepage.dev/configs/services/
+
+- Locations:
+    - Oakdene:
+        href: https://home.oakdene.it.com
+        description: Oakdene homepage dashboard
+        icon: home-assistant.png
+
+    - Ridgeway:
+        href: https://home.chattoweb.net
+        description: Ridgeway homepage dashboard
+        icon: home-assistant.png
+
+- Authentication & Access:
+    - Authentik:
+        href: https://auth.chattoweb.net
+        description: SSO and authentication platform
+        icon: authentik.png
+
+    - PocketID:
+        href: https://pocketid.chattoweb.net
+        description: Identity and authentication service
+        icon: pocketbase.png
+
+- Network & Infrastructure:
+    - Pi-hole:
+        href: https://pihole.chattoweb.net/admin
+        description: Network-wide ad blocking
+        icon: pi-hole.png
+        widget:
+          type: pihole
+          url: http://192.168.1.15
+          key: dfb54af68550edd0f3dfa008608511a77f5c78f50456aaec1a554c9c57dd5c9a
+
+    - Nginx Proxy Manager:
+        href: https://nginx.chattoweb.net
+        description: Reverse proxy manager
+        icon: nginx-proxy-manager.png
+
+    - UniFi Controller:
+        href: https://unifi.chattoweb.net
+        description: Network management
+        icon: unifi.png
+
+    - Proxmox:
+        href: https://proxmox.chattoweb.com
+        description: Virtualization platform
+        icon: proxmox.png
+        widget:
+          type: proxmox
+          url: https://proxmox.chattoweb.net
+          username: root@pam!homepage
+          password: 1f4bd30e-0d2e-4a99-a83d-ceff84609db4
+          node: pve
+
+- Storage:
+    - NAS Backup:
+        href: https://nasbackup.chattoweb.com
+        description: Network attached storage
+        icon: synology.png
+
+    - NAS:
+        href: https://nas.chattoweb.com
+        description: Network attached storage
+        icon: synology.png
+
+- Media Management:
+    - Plex:
+        href: https://plex.chattoweb.net
+        description: Media server and streaming
+        icon: plex.png
+        widget:
+          type: plex
+          url: http://172.22.20.5:32400
+          key: t45zUvXzMtzV_sJQX_Jz
+
+    - Radarr:
+        href: https://radarr.chattoweb.com
+        description: Movie collection manager
+        icon: radarr.png
+
+    - Sonarr:
+        href: https://sonarr.chattoweb.com
+        description: TV series collection manager
+        icon: sonarr.png
+
+    - Prowlarr:
+        href: https://prowlarr.chattoweb.com
+        description: Indexer manager
+        icon: prowlarr.png
+
+    - SABnzbd:
+        href: https://sab.chattoweb.com
+        description: Usenet downloader
+        icon: sabnzbd.png
+
+    - Tracarr:
+        href: https://tracearr.chattoweb.com
+        description: Track Plex usage
+        icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/tracearr.png
+
+    - Overseerr:
+        href: https://overseerr.chattoweb.com/login
+        description: Movie and TV search
+        icon: overseerr.png
+
+    - Agregarr:
+        href: https://agregarr.chattoweb.net/login
+        description: Movie and TV search organisation
+        icon: agregarr.png
+
+- Personal & Productivity:
+    - Mealie:
+        href: https://mealie.chattoweb.com
+        description: Recipe manager and meal planner
+        icon: mealie.png
+
+    - Wallos:
+        href: https://wallos.chattoweb.net
+        description: Subscription tracker
+        icon: wallos.png
+
+    - Wiki:
+        href: https://wiki.chattoweb.net
+        description: Documentation
+        icon: wikijs.png
+
+    - Kuma:
+        href: https://kuma.chattoweb.com
+        description: Monitoring
+        icon: uptime-kuma.png
+
+    - Home Assistant:
+        href: https://ha.chattoweb.com
+        description: Home management
+        icon: home-assistant.png
+
+    - Rain Drop:
+        href: https://app.raindrop.io/my/63675921
+        description: Bookmarks
+        icon: https://image.pngaaa.com/822/4681822-middle.png
+
+    - Stirling PDF:
+        href: https://stirling.chattoweb.com/
+        description: PDF management
+        icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/stirling-pdf.png
+
+- Microsoft Development:
+    - Microsoft 365:
+        href: https://www.microsoft365.com
+        description: Microsoft 365 apps and cloud services portal
+        icon: microsoft.png
+
+    - Outlook:
+        href: https://outlook.office.com
+        description: Outlook web mail and calendar
+        icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/microsoft-outlook.png
+
+    - Microsoft Admin Center:
+        href: https://admin.microsoft.com
+        description: Microsoft 365 tenant administration and licensing
+        icon: microsoft.png
+
+    - Microsoft Cloud Admin:
+        href: https://admin.cloud.microsoft
+        description: Unified Microsoft cloud administration portal
+        icon: microsoft.png
+
+    - Microsoft Security:
+        href: https://security.microsoft.com
+        description: Microsoft Defender and security operations portal
+        icon: microsoft-defender.png
+
+    - Microsoft Compliance:
+        href: https://compliance.microsoft.com
+        description: Compliance, retention and governance management
+        icon: microsoft.png
+
+    - Microsoft Intune:
+        href: https://intune.microsoft.com
+        description: Endpoint management, compliance and device configuration
+        icon: microsoft-intune.png
+
+    - Entra Admin Center:
+        href: https://entra.microsoft.com
+        description: Identity and access management
+        icon: microsoft.png
+
+    - Azure Portal:
+        href: https://portal.azure.com
+        description: Azure cloud infrastructure and services management
+        icon: azure.png
+
+    - Azure DevOps:
+        href: https://dev.azure.com
+        description: DevOps repositories, pipelines and boards
+        icon: azure-devops.png
+
+    - Exchange Admin Center:
+        href: https://admin.exchange.microsoft.com
+        description: Exchange Online and mail flow administration
+        icon: microsoft-exchange.png
+
+    - Teams Admin Center:
+        href: https://admin.teams.microsoft.com
+        description: Teams administration and voice management
+        icon: microsoft-teams.png
+
+    - SharePoint Admin Center:
+        href: https://admin.microsoft.com/sharepoint
+        description: SharePoint and OneDrive administration
+        icon: microsoft-sharepoint.png
+
+    - Power Platform:
+        href: https://make.powerapps.com
+        description: Power Apps and Power Automate development
+        icon: microsoft.png
+
+    - Microsoft Learn:
+        href: https://learn.microsoft.com
+        description: Microsoft documentation and certification learning
+        icon: microsoft.png
+
+- ChattoWeb.com:
+    - Portainer 172.22.20.5:
+        href: https://portainer.chattoweb.com
+        description: Portainer Docker PROD
+        icon: portainer.png
+
+    - CockPit 172.22.20.2:
+        href: https://cockpitdocker.chattoweb.com
+        description: CockPit - CloudFlared
+        icon: cockpit.png
+
+    - CloudFlare 172.22.20.2:
+        href: https://cloudflare.chattoweb.com
+        description: CloudFlared routing
+        icon: cockpit.png
+
+    - OVH Deploy:
+        href: https://deploy.chattoweb.com
+        description: OVH Deploy
+        icon: cockpit.png
+
+    - CockPit 172.22.20.5:
+        href: https://cockpitdockerprod.chattoweb.com
+        description: CockPit - Docker PROD
+        icon: cockpit.png
+
+    - CockPit 172.22.20.7:
+        href: https://cockpitcoolify.chattoweb.com
+        description: CockPit - Coolify
+        icon: cockpit.png
+
+    - Coolify:
+        href: https://coolify.chattoweb.com
+        description: Coolify - 172.22.20.7
+        icon: coolify.png
+
+    - AdGuard:
+        href: https://adguard.chattoweb.com
+        description: AdGuard
+        icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/adguard-home.png
+
+    - Grafana:
+        href: https://grafana.chattoweb.com
+        description: Reporting and dashboards
+        icon: grafana.png
+
+    - Dockhand:
+        href: https://dockhand.chattoweb.com
+        description: Docker management
+        icon: https://dockhand.pro/images/logo-dark.webp
+
+    - Actual Budget:
+        href: https://budget.chattoweb.com
+        description: Actual Budget
+        icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/actual-budget.png
+
+    - Policy Tracker:
+        href: https://policy.chattoweb.com
+        description: Policy Tracker
+        icon: mdi-file-document-check-outline
+
+- Chattolab.com:
+    - Portainer 172.22.30.10:
+        href: https://portainer.chattolabs.com
+        description: Portainer LAB
+        icon: portainer.png
+
+    - Cockpit 172.122.30.10:
+        href: https://cockpitdocker.chattolabs.com
+        description: Docker LAB
+        icon: cockpit.png

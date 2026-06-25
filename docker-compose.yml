@@ -1,0 +1,16 @@
+services:
+  landingpage:
+    build: .
+    container_name: landingpage
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data:/app/data
+    environment:
+      TZ: Europe/London
+      HOST: 0.0.0.0
+      PORT: 3000
+      GIT_SYNC_ENABLED: "true"
+      GIT_SYNC_INTERVAL_MINUTES: 15
+      GIT_SYNC_BRANCH: main
