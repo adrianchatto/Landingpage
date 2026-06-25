@@ -1,9 +1,8 @@
 {
   "meta": {
     "title": "Landingpage",
-    "source": "Imported from Homepage-Config-Ridgeway services.yaml",
-    "updatedAt": "2026-06-25T16:02:32.427Z",
-    "metadataSeededAt": "2026-06-25T16:01:05.883Z"
+    "source": "Imported from data/services.yaml",
+    "updatedAt": "2026-06-25T16:58:45.550Z"
   },
   "pages": [
     {
@@ -138,7 +137,6 @@
             "network & infrastructure",
             "network / infrastructure"
           ],
-          "widgetType": "pihole",
           "category": "Network / Infrastructure",
           "keywords": [
             "network",
@@ -158,7 +156,8 @@
             "net",
             "pi-hole"
           ],
-          "notes": "Imported from Network & Infrastructure. Search metadata seeded from service name, page, hostname, and description."
+          "notes": "Imported from Network & Infrastructure. Search metadata seeded from service name, page, hostname, and description.",
+          "widgetType": "pihole"
         },
         {
           "id": "nginx-proxy-manager",
@@ -232,7 +231,6 @@
             "network & infrastructure",
             "network / infrastructure"
           ],
-          "widgetType": "proxmox",
           "category": "Network / Infrastructure",
           "keywords": [
             "network",
@@ -253,7 +251,8 @@
             "chattoweb",
             "com"
           ],
-          "notes": "Imported from Network & Infrastructure. Search metadata seeded from service name, page, hostname, and description."
+          "notes": "Imported from Network & Infrastructure. Search metadata seeded from service name, page, hostname, and description.",
+          "widgetType": "proxmox"
         }
       ]
     },
@@ -327,7 +326,6 @@
           "tags": [
             "media management"
           ],
-          "widgetType": "plex",
           "category": "Media Management",
           "keywords": [
             "media",
@@ -343,7 +341,8 @@
             "chattoweb",
             "net"
           ],
-          "notes": "Imported from Media Management. Search metadata seeded from service name, page, hostname, and description."
+          "notes": "Imported from Media Management. Search metadata seeded from service name, page, hostname, and description.",
+          "widgetType": "plex"
         },
         {
           "id": "radarr",
