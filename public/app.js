@@ -145,19 +145,6 @@ function renderServices(page) {
   const services = visibleServices(page);
   els.serviceGrid.innerHTML = services
     .map((service) => {
-      const widget = service.widgetType ? `<span class="pill">${escapeHtml(service.widgetType)}</span>` : "";
-      const category = service.category ? `<span class="pill category">${escapeHtml(service.category)}</span>` : "";
-      const pageBadge = state.query && service.pageName ? `<span class="pill page-pill">${escapeHtml(service.pageName)}</span>` : "";
-      const keywords = (service.keywords || []).slice(0, 4);
-      const keywordMarkup = keywords.length
-        ? `<div class="keyword-row">${keywords.map((keyword) => `<span>${escapeHtml(keyword)}</span>`).join("")}</div>`
-        : "";
-      let hostname = service.href;
-      try {
-        hostname = new URL(service.href).hostname.replace(/^www\./, "");
-      } catch {
-        hostname = service.href;
-      }
       return `<article class="service-card">
         <div class="service-top">
           <a class="service-icon" href="${escapeAttribute(service.href)}" target="_blank" rel="noreferrer">${renderIcon(service)}</a>
@@ -165,11 +152,6 @@ function renderServices(page) {
         </div>
         <h2><a href="${escapeAttribute(service.href)}" target="_blank" rel="noreferrer">${escapeHtml(service.name)}</a></h2>
         <p>${escapeHtml(service.description || "No description yet.")}</p>
-        ${keywordMarkup}
-        <div class="service-meta">
-          <span class="meta-pills">${pageBadge}${category}${widget}</span>
-          <span>${escapeHtml(hostname)}</span>
-        </div>
       </article>`;
     })
     .join("");

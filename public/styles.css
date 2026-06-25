@@ -325,7 +325,6 @@ textarea {
 }
 
 .service-top,
-.service-meta,
 .modal-actions,
 .modal-header {
   display: flex;
@@ -384,52 +383,6 @@ textarea {
   margin: 0;
   color: var(--muted);
   line-height: 1.5;
-}
-
-.keyword-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.keyword-row span {
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  color: var(--muted);
-  font-size: 0.72rem;
-  font-weight: 750;
-  padding: 4px 7px;
-}
-
-.service-meta {
-  justify-content: space-between;
-  gap: 10px;
-  color: var(--muted);
-  font-size: 0.78rem;
-  font-weight: 700;
-}
-
-.meta-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.pill {
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--accent) 16%, transparent);
-  color: var(--accent-strong);
-  padding: 5px 8px;
-}
-
-.pill.category {
-  background: color-mix(in srgb, var(--yellow) 20%, transparent);
-  color: var(--yellow);
-}
-
-.pill.page-pill {
-  background: color-mix(in srgb, var(--muted) 18%, transparent);
-  color: var(--muted);
 }
 
 .modal {
