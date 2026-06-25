@@ -320,6 +320,32 @@ textarea:focus {
   min-width: 230px;
 }
 
+.segmented {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 40px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--panel-solid) 74%, transparent);
+  padding: 3px;
+}
+
+.segmented button {
+  min-width: 78px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 780;
+  padding: 0 10px;
+}
+
+.segmented button.active {
+  background: var(--panel-raised);
+  color: var(--ink);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+}
+
 .quick-strip {
   display: grid;
   grid-template-columns: repeat(8, minmax(82px, 1fr));
@@ -373,6 +399,54 @@ textarea:focus {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 14px;
+}
+
+.service-list {
+  display: grid;
+  gap: 8px;
+}
+
+.service-row {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  padding: 10px 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+.service-row:hover {
+  border-color: var(--line-strong);
+}
+
+.service-row-copy {
+  min-width: 0;
+}
+
+.service-row h2,
+.service-row p {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.service-row h2 {
+  font-size: 0.98rem;
+}
+
+.service-row h2 a:hover {
+  color: var(--accent);
+}
+
+.service-row p {
+  color: var(--muted);
+  font-size: 0.82rem;
+  margin-top: 2px;
 }
 
 .service-card {

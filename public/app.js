@@ -1,7 +1,5 @@
-import React, { useEffect, useMemo, useState } from "https://esm.sh/react@18.3.1";
-import { createRoot } from "https://esm.sh/react-dom@18.3.1/client";
-
 const h = React.createElement;
+const { useEffect, useMemo, useState } = React;
 
 async function api(path, options = {}) {
   const response = await fetch(path, {
@@ -146,7 +144,7 @@ function Sidebar({ pages, activePageId, setActivePageId, syncStatus, onSyncNow, 
   );
 }
 
-function Topbar({ page, countText, query, setQuery, onAddService }) {
+function Topbar({ page, countText, query, setQuery, onAddService, displayMode, setDisplayMode }) {
   return h(
     "header",
     { className: "topbar" },
@@ -169,6 +167,30 @@ function Topbar({ page, countText, query, setQuery, onAddService }) {
           value: query,
           onChange: (event) => setQuery(event.target.value)
         })
+      ),
+      h(
+        "div",
+        { className: "segmented", role: "group", "aria-label": "Service display mode" },
+        h(
+          "button",
+          {
+            type: "button",
+            className: displayMode === "cards" ? "active" : "",
+            "aria-pressed": displayMode === "cards",
+            onClick: () => setDisplayMode("cards")
+          },
+          "Cards"
+        ),
+        h(
+          "button",
+          {
+            type: "button",
+            className: displayMode === "compact" ? "active" : "",
+            "aria-pressed": displayMode === "compact",
+            onClick: () => setDisplayMode("compact")
+          },
+          "Compact"
+        )
       ),
       h("button", { className: "primary", type: "button", onClick: onAddService }, "Add service")
     )
@@ -205,12 +227,42 @@ function ServiceCard({ service, pageId, onEdit }) {
   );
 }
 
-function ServiceGrid({ services, activePage, query, onEdit }) {
+function ServiceRow({ service, pageId, onEdit }) {
+  return h(
+    "article",
+    { className: "service-row" },
+    h("a", { href: service.href, target: "_blank", rel: "noreferrer", "aria-label": `Open ${service.name}` }, h(ServiceIcon, { service, size: "small" })),
+    h(
+      "div",
+      { className: "service-row-copy" },
+      h("h2", null, h("a", { href: service.href, target: "_blank", rel: "noreferrer" }, service.name)),
+      h("p", null, service.description || "No description yet.")
+    ),
+    h("button", { className: "card-edit", type: "button", onClick: () => onEdit(service, pageId) }, "Edit")
+  );
+}
+
+function ServiceGrid({ services, activePage, query, onEdit, displayMode }) {
   if (!services.length) {
     return h(
       "section",
       { className: "service-grid" },
       h("div", { className: "empty-state" }, h("h2", null, "No services found"), h("p", null, "Add a service or adjust the current search."))
+    );
+  }
+
+  if (displayMode === "compact") {
+    return h(
+      "section",
+      { className: "service-list" },
+      services.map((service) =>
+        h(ServiceRow, {
+          key: `${service.pageId || activePage.id}-${service.id}`,
+          service,
+          pageId: service.pageId || activePage.id,
+          onEdit
+        })
+      )
     );
   }
 
@@ -359,6 +411,7 @@ function App() {
   const [activePageId, setActivePageId] = useState(null);
   const [query, setQuery] = useState("");
   const [theme, setThemeState] = useState(() => localStorage.getItem("landingpage-theme") || "dark");
+  const [displayMode, setDisplayModeState] = useState(() => localStorage.getItem("landingpage-display-mode") || "cards");
   const [syncStatus, setSyncStatus] = useState({ enabled: true, running: false, lastMessage: "Loading" });
   const [serviceModal, setServiceModal] = useState(null);
   const [pageModalOpen, setPageModalOpen] = useState(false);
@@ -377,6 +430,10 @@ function App() {
     document.documentElement.dataset.theme = theme;
     localStorage.setItem("landingpage-theme", theme);
   }, [theme]);
+
+  useEffect(() => {
+    localStorage.setItem("landingpage-display-mode", displayMode);
+  }, [displayMode]);
 
   useEffect(() => {
     async function refreshSyncStatus() {
@@ -422,6 +479,10 @@ function App() {
     setThemeState(nextTheme);
   }
 
+  function setDisplayMode(nextMode) {
+    setDisplayModeState(nextMode);
+  }
+
   function onCatalogSaved(nextCatalog) {
     setCatalog(nextCatalog);
     setServiceModal(null);
@@ -463,13 +524,16 @@ function App() {
           countText,
           query,
           setQuery,
-          onAddService: () => setServiceModal({ service: null, pageId: activePage.id })
+          onAddService: () => setServiceModal({ service: null, pageId: activePage.id }),
+          displayMode,
+          setDisplayMode
         }),
         h(QuickStrip, { services: activePage.services }),
         h(ServiceGrid, {
           services: visibleServices,
           activePage,
           query,
+          displayMode,
           onEdit: (service, pageId) => setServiceModal({ service, pageId })
         })
       )
@@ -483,4 +547,4 @@ function App() {
   );
 }
 
-createRoot(document.querySelector("#root")).render(h(App));
+ReactDOM.createRoot(document.querySelector("#root")).render(h(App));

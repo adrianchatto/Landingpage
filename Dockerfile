@@ -6,6 +6,7 @@ RUN apk add --no-cache git openssh-client
 
 COPY package.json ./
 COPY server.js ./
+COPY lib ./lib
 COPY public ./public
 COPY data ./data
 
