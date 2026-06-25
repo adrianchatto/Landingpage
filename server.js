@@ -3,6 +3,7 @@ import { readFile, writeFile, mkdir, rename, stat } from "node:fs/promises";
 import { createReadStream } from "node:fs";
 import { extname, join, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
+import { randomUUID } from "node:crypto";
 import { catalogToServicesYaml, slugify } from "./lib/catalog-yaml.js";
 import { createGitSync } from "./lib/git-sync.js";
 
