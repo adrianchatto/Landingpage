@@ -1,16 +1,20 @@
 services:
   landingpage:
     build: .
+    image: landingpage:latest
     container_name: landingpage
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "3021:3000"
     volumes:
-      - ./data:/app/data
+      - landingpage-data:/app/data
     environment:
       TZ: Europe/London
       HOST: 0.0.0.0
       PORT: 3000
-      GIT_SYNC_ENABLED: "true"
+      GIT_SYNC_ENABLED: "false"
       GIT_SYNC_INTERVAL_MINUTES: 15
       GIT_SYNC_BRANCH: main
+
+volumes:
+  landingpage-data:

@@ -62,4 +62,40 @@ PORT=8080 npm start
 docker compose up -d --build
 ```
 
-The compose file mounts `./data` into the container so services added from the UI persist on the host.
+Current production deployment:
+
+- Host: `172.22.20.5`
+- Container: `landingpage`
+- Image: `landingpage:latest`
+- Host port: `3021`
+- Container port: `3000`
+- URL: `http://172.22.20.5:3021`
+- Data volume: `landingpage-data:/app/data`
+- Git sync in container: disabled by default
+
+Run directly on the Docker host:
+
+```bash
+docker run -d \
+  --name landingpage \
+  --restart unless-stopped \
+  -p 3021:3000 \
+  -e TZ=Europe/London \
+  -e HOST=0.0.0.0 \
+  -e PORT=3000 \
+  -e GIT_SYNC_ENABLED=false \
+  -e GIT_SYNC_INTERVAL_MINUTES=15 \
+  -e GIT_SYNC_BRANCH=main \
+  -v landingpage-data:/app/data \
+  landingpage:latest
+```
+
+Or use the included compose file:
+
+```bash
+docker compose up -d --build
+```
+
+The compose file uses a named volume, `landingpage-data`, so UI edits and synced service data persist across container upgrades.
+
+The Docker container runs the app and persists `/app/data`, but it is not a Git checkout with write credentials. Leave `GIT_SYNC_ENABLED=false` for this normal container deployment. Enable Git sync only when the app is running from a real Git checkout with push credentials available.
