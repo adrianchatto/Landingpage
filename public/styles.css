@@ -184,7 +184,8 @@ a {
 }
 
 .sync-panel strong,
-.sync-panel span {
+.sync-panel span,
+.sync-panel small {
   display: block;
 }
 
@@ -196,6 +197,17 @@ a {
   color: var(--muted);
   font-size: 0.76rem;
   margin-top: 2px;
+}
+
+.sync-panel small {
+  max-width: 178px;
+  color: var(--muted);
+  font-size: 0.7rem;
+  line-height: 1.35;
+  margin-top: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .page-nav {

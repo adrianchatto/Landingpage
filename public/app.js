@@ -51,11 +51,16 @@ function serviceSearchText(service, page) {
 function formatSyncStatus(status) {
   if (!status.enabled) return "Disabled";
   if (status.running) return "Running";
-  if (status.lastError) return "Needs attention";
+  if (status.lastError) return "Git needs attention";
   if (status.lastSuccessAt) {
     return `OK ${new Date(status.lastSuccessAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
   }
   return "Every 15 min";
+}
+
+function syncDetail(status) {
+  if (status.lastError) return status.lastError;
+  return status.lastMessage || "Waiting for first sync.";
 }
 
 function splitKeywords(value) {
@@ -112,7 +117,13 @@ function Sidebar({ pages, activePageId, setActivePageId, syncStatus, onSyncNow, 
     h(
       "div",
       { className: "sync-panel" },
-      h("div", null, h("strong", null, "Git Sync"), h("span", { title: syncStatus.lastError || syncStatus.lastMessage || "" }, formatSyncStatus(syncStatus))),
+      h(
+        "div",
+        null,
+        h("strong", null, "Git Sync"),
+        h("span", { className: "sync-label" }, formatSyncStatus(syncStatus)),
+        h("small", { title: syncDetail(syncStatus) }, syncDetail(syncStatus))
+      ),
       h("button", { type: "button", disabled: syncStatus.running, onClick: onSyncNow }, "Sync")
     ),
     h(
