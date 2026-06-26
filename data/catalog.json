@@ -2,7 +2,7 @@
   "meta": {
     "title": "Landingpage",
     "source": "Imported from data/services.yaml",
-    "updatedAt": "2026-06-26T14:29:00.787Z"
+    "updatedAt": "2026-06-26T15:46:34.912Z"
   },
   "pages": [
     {
@@ -1509,8 +1509,7 @@
           ],
           "category": "ChattoWeb.com",
           "keywords": [],
-          "notes": "",
-          "widgetType": ""
+          "notes": ""
         }
       ]
     },
@@ -1579,8 +1578,7 @@
           ],
           "category": "Chattolab.com",
           "keywords": [],
-          "notes": "",
-          "widgetType": ""
+          "notes": ""
         },
         {
           "id": "cloudflare-172-22-20-2",
@@ -1609,8 +1607,7 @@
             "172.22.20.2",
             "router"
           ],
-          "notes": "Imported from ChattoWeb.com. Search metadata seeded from service name, page, hostname, and description.",
-          "widgetType": ""
+          "notes": "Imported from ChattoWeb.com. Search metadata seeded from service name, page, hostname, and description."
         }
       ]
     }
