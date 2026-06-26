@@ -109,7 +109,7 @@ function Sidebar({ pages, activePageId, setActivePageId, syncStatus, onSyncNow, 
           "aria-pressed": theme === "dark",
           onClick: () => setTheme(theme === "dark" ? "light" : "dark")
         },
-        theme === "dark" ? "Dark mode" : "Light mode"
+        "Theme"
       ),
       h(
         "button",
@@ -190,7 +190,7 @@ function Topbar({ page, countText, query, setQuery, onAddService, displayMode, s
             "aria-pressed": displayMode === "cards",
             onClick: () => setDisplayMode("cards")
           },
-          "Cards"
+        "Grid"
         ),
         h(
           "button",
@@ -465,8 +465,14 @@ function App() {
   const [activePageId, setActivePageId] = useState(null);
   const [query, setQuery] = useState("");
   const [theme, setThemeState] = useState(() => localStorage.getItem("landingpage-theme") || "dark");
-  const [displayMode, setDisplayModeState] = useState(() => localStorage.getItem("landingpage-display-mode") || "compact");
-  const [menuHidden, setMenuHiddenState] = useState(() => localStorage.getItem("landingpage-menu-hidden") === "true");
+  const [displayMode, setDisplayModeState] = useState(() => {
+    if (localStorage.getItem("landingpage-ui-version") !== "2") return "compact";
+    return localStorage.getItem("landingpage-display-mode") || "compact";
+  });
+  const [menuHidden, setMenuHiddenState] = useState(() => {
+    if (localStorage.getItem("landingpage-ui-version") !== "2") return false;
+    return localStorage.getItem("landingpage-menu-hidden") === "true";
+  });
   const [syncStatus, setSyncStatus] = useState({ enabled: true, running: false, lastMessage: "Loading" });
   const [serviceModal, setServiceModal] = useState(null);
   const [pageModalOpen, setPageModalOpen] = useState(false);
@@ -487,6 +493,7 @@ function App() {
   }, [theme]);
 
   useEffect(() => {
+    localStorage.setItem("landingpage-ui-version", "2");
     localStorage.setItem("landingpage-display-mode", displayMode);
   }, [displayMode]);
 
@@ -596,7 +603,6 @@ function App() {
           menuHidden,
           onShowMenu: () => setMenuHidden(false)
         }),
-        h(QuickStrip, { services: activePage.services }),
         h(ServiceGrid, {
           services: visibleServices,
           activePage,
