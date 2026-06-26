@@ -2,7 +2,7 @@
   "meta": {
     "title": "Landingpage",
     "source": "Imported from data/services.yaml",
-    "updatedAt": "2026-06-26T21:21:02.879Z"
+    "updatedAt": "2026-06-26T21:21:31.652Z"
   },
   "pages": [
     {
@@ -1614,7 +1614,7 @@
     {
       "id": "work",
       "name": "Work",
-      "description": "",
+      "description": "Synced from services.yaml",
       "services": [
         {
           "id": "jira-d4835167",
