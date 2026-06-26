@@ -200,6 +200,16 @@ function Topbar({ page, countText, query, setQuery, onAddService, displayMode, s
             onClick: () => setDisplayMode("compact")
           },
           "Compact"
+        ),
+        h(
+          "button",
+          {
+            type: "button",
+            className: displayMode === "hidden" ? "active" : "",
+            "aria-pressed": displayMode === "hidden",
+            onClick: () => setDisplayMode("hidden")
+          },
+          "Hidden"
         )
       ),
       h("button", { className: "primary", type: "button", onClick: onAddService }, "Add service")
@@ -258,6 +268,14 @@ function ServiceGrid({ services, activePage, query, onEdit, displayMode }) {
       "section",
       { className: "service-grid" },
       h("div", { className: "empty-state" }, h("h2", null, "No services found"), h("p", null, "Add a service or adjust the current search."))
+    );
+  }
+
+  if (displayMode === "hidden") {
+    return h(
+      "section",
+      { className: "services-hidden" },
+      h("p", null, `${services.length} services hidden. Switch to Compact or Cards to show them.`)
     );
   }
 
@@ -421,7 +439,7 @@ function App() {
   const [activePageId, setActivePageId] = useState(null);
   const [query, setQuery] = useState("");
   const [theme, setThemeState] = useState(() => localStorage.getItem("landingpage-theme") || "dark");
-  const [displayMode, setDisplayModeState] = useState(() => localStorage.getItem("landingpage-display-mode") || "cards");
+  const [displayMode, setDisplayModeState] = useState(() => localStorage.getItem("landingpage-display-mode") || "compact");
   const [menuHidden, setMenuHiddenState] = useState(() => localStorage.getItem("landingpage-menu-hidden") === "true");
   const [syncStatus, setSyncStatus] = useState({ enabled: true, running: false, lastMessage: "Loading" });
   const [serviceModal, setServiceModal] = useState(null);

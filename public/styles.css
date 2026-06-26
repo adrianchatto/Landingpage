@@ -330,7 +330,7 @@ textarea:focus {
 
 .segmented {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   min-height: 40px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -339,13 +339,25 @@ textarea:focus {
 }
 
 .segmented button {
-  min-width: 78px;
+  min-width: 74px;
   border: 0;
   border-radius: 6px;
   background: transparent;
   color: var(--muted);
   font-weight: 780;
   padding: 0 10px;
+}
+
+.services-hidden {
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--panel) 70%, transparent);
+  color: var(--muted);
+  padding: 18px;
+}
+
+.services-hidden p {
+  margin: 0;
 }
 
 .segmented button.active {
