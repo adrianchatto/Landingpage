@@ -1125,32 +1125,6 @@
             - cockpit
             - 172.22.20.2
 
-    - CloudFlare 172.22.20.2:
-        href: https://cloudflare.chattoweb.com
-        description: CloudFlared routing
-        icon: cockpit.png
-        x-landingpage:
-          id: cloudflare-172-22-20-2
-          category: ChattoWeb.com
-          notes: Imported from ChattoWeb.com. Search metadata seeded from service name, page, hostname, and description.
-          tags:
-            - chattoweb.com
-          keywords:
-            - chattoweb
-            - production
-            - prod
-            - docker
-            - cloudflare
-            - deploy
-            - monitoring
-            - finance
-            - cloudflared
-            - tunnel
-            - dns
-            - routing
-            - com
-            - 172.22.20.2
-
     - OVH Deploy:
         href: https://deploy.chattoweb.com
         description: OVH Deploy
@@ -1375,6 +1349,17 @@
             - governance
             - com
 
+    - Deploy:
+        href: https://deploy.chattoweb.com/
+        description: Portainer Clone
+        x-landingpage:
+          id: deploy-1f9f6896
+          category: ChattoWeb.com
+          tags:
+            - ChattoWeb.com
+          keywords:
+            []
+
 - Chattolab.com:
     - Portainer 172.22.30.10:
         href: https://portainer.chattolabs.com
@@ -1420,3 +1405,40 @@
             - chattolabs
             - com
             - 172.122.30.10
+
+    - Chattolabs project tracker:
+        href: https://chattolabs.com
+        x-landingpage:
+          id: chattolabs-project-tracker-d0ac53d4
+          category: Chattolab.com
+          tags:
+            - Chattolab.com
+          keywords:
+            []
+
+    - CloudFlare Router:
+        href: https://cloudflare.chattoweb.com
+        description: CloudFlared routing
+        icon: cloudflare.png
+        x-landingpage:
+          id: cloudflare-172-22-20-2
+          category: Chattolab.com
+          notes: Imported from ChattoWeb.com. Search metadata seeded from service name, page, hostname, and description.
+          tags:
+            - Chattolab.com
+          keywords:
+            - chattoweb
+            - production
+            - prod
+            - docker
+            - cloudflare
+            - deploy
+            - monitoring
+            - finance
+            - cloudflared
+            - tunnel
+            - dns
+            - routing
+            - com
+            - 172.22.20.2
+            - router

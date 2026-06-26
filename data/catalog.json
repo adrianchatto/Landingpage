@@ -2,7 +2,7 @@
   "meta": {
     "title": "Landingpage",
     "source": "Imported from data/services.yaml",
-    "updatedAt": "2026-06-25T17:02:49.452Z"
+    "updatedAt": "2026-06-26T14:29:00.787Z"
   },
   "pages": [
     {
@@ -1257,34 +1257,6 @@
           "notes": "Imported from ChattoWeb.com. Search metadata seeded from service name, page, hostname, and description."
         },
         {
-          "id": "cloudflare-172-22-20-2",
-          "name": "CloudFlare 172.22.20.2",
-          "href": "https://cloudflare.chattoweb.com",
-          "description": "CloudFlared routing",
-          "icon": "cockpit.png",
-          "tags": [
-            "chattoweb.com"
-          ],
-          "category": "ChattoWeb.com",
-          "keywords": [
-            "chattoweb",
-            "production",
-            "prod",
-            "docker",
-            "cloudflare",
-            "deploy",
-            "monitoring",
-            "finance",
-            "cloudflared",
-            "tunnel",
-            "dns",
-            "routing",
-            "com",
-            "172.22.20.2"
-          ],
-          "notes": "Imported from ChattoWeb.com. Search metadata seeded from service name, page, hostname, and description."
-        },
-        {
           "id": "ovh-deploy",
           "name": "OVH Deploy",
           "href": "https://deploy.chattoweb.com",
@@ -1525,6 +1497,20 @@
             "com"
           ],
           "notes": "Imported from ChattoWeb.com. Search metadata seeded from service name, page, hostname, and description."
+        },
+        {
+          "id": "deploy-1f9f6896",
+          "name": "Deploy",
+          "href": "https://deploy.chattoweb.com/",
+          "description": "Portainer Clone",
+          "icon": "",
+          "tags": [
+            "ChattoWeb.com"
+          ],
+          "category": "ChattoWeb.com",
+          "keywords": [],
+          "notes": "",
+          "widgetType": ""
         }
       ]
     },
@@ -1581,6 +1567,50 @@
             "172.122.30.10"
           ],
           "notes": "Imported from Chattolab.com. Search metadata seeded from service name, page, hostname, and description."
+        },
+        {
+          "id": "chattolabs-project-tracker-d0ac53d4",
+          "name": "Chattolabs project tracker",
+          "href": "https://chattolabs.com",
+          "description": "",
+          "icon": "",
+          "tags": [
+            "Chattolab.com"
+          ],
+          "category": "Chattolab.com",
+          "keywords": [],
+          "notes": "",
+          "widgetType": ""
+        },
+        {
+          "id": "cloudflare-172-22-20-2",
+          "name": "CloudFlare Router",
+          "href": "https://cloudflare.chattoweb.com",
+          "description": "CloudFlared routing",
+          "icon": "cloudflare.png",
+          "tags": [
+            "Chattolab.com"
+          ],
+          "category": "Chattolab.com",
+          "keywords": [
+            "chattoweb",
+            "production",
+            "prod",
+            "docker",
+            "cloudflare",
+            "deploy",
+            "monitoring",
+            "finance",
+            "cloudflared",
+            "tunnel",
+            "dns",
+            "routing",
+            "com",
+            "172.22.20.2",
+            "router"
+          ],
+          "notes": "Imported from ChattoWeb.com. Search metadata seeded from service name, page, hostname, and description.",
+          "widgetType": ""
         }
       ]
     }
