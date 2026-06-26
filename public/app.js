@@ -114,11 +114,12 @@ function Sidebar({ pages, activePageId, setActivePageId, syncStatus, onSyncNow, 
       h(
         "button",
         {
-          className: "ghost sidebar-command sidebar-wide-command",
+          className: "collapse-toggle",
           type: "button",
+          "aria-label": "Hide menu",
           onClick: onHideMenu
         },
-        "Hide menu"
+        "<<"
       )
     ),
     h(
@@ -166,7 +167,7 @@ function Topbar({ page, countText, query, setQuery, onAddService, displayMode, s
     h(
       "div",
       { className: "actions" },
-      menuHidden && h("button", { className: "ghost", type: "button", onClick: onShowMenu }, "Show menu"),
+      menuHidden && h("button", { className: "collapse-toggle floating-toggle", type: "button", "aria-label": "Show menu", onClick: onShowMenu }, ">>"),
       h(
         "label",
         { className: "search" },

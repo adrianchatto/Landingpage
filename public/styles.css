@@ -127,7 +127,7 @@ a {
 
 .sidebar-actions {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 44px;
   gap: 8px;
   margin-bottom: 12px;
 }
@@ -175,8 +175,21 @@ a {
   width: 100%;
 }
 
-.sidebar-wide-command {
-  grid-column: 1 / -1;
+.collapse-toggle {
+  display: inline-grid;
+  min-width: 44px;
+  min-height: 40px;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--panel-raised) 86%, transparent);
+  color: var(--ink);
+  font-weight: 900;
+  padding: 0 10px;
+}
+
+.floating-toggle {
+  align-self: end;
 }
 
 .sync-panel {
