@@ -192,6 +192,45 @@ html[data-theme="light"] .sidebar {
   padding: 11px;
 }
 
+.settings-panel {
+  display: grid;
+  gap: 9px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 11px;
+}
+
+.settings-panel h2 {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 860;
+  text-transform: uppercase;
+}
+
+.settings-row {
+  display: grid;
+  gap: 7px;
+}
+
+.settings-row > span {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 760;
+}
+
+.settings-panel .segmented {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: 100%;
+}
+
+.settings-panel .segmented button {
+  min-width: 0;
+  padding: 0 6px;
+  font-size: 0.8rem;
+}
+
 .sync-panel strong,
 .sync-panel span,
 .sync-panel small {
@@ -370,8 +409,26 @@ textarea:focus {
   padding: 0 10px;
 }
 
-.floating-toggle {
+.menu-restore {
+  position: fixed;
+  top: 16px;
+  left: 14px;
+  z-index: 30;
+  display: inline-grid;
   min-width: 42px;
+  min-height: 38px;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  color: var(--ink);
+  font-weight: 900;
+  box-shadow: var(--shadow);
+  padding: 0 10px;
+}
+
+.menu-hidden .workspace {
+  padding-left: clamp(68px, 6vw, 84px);
 }
 
 .segmented {
@@ -742,6 +799,10 @@ textarea:focus {
     padding: 14px 12px 32px;
   }
 
+  .menu-hidden .workspace {
+    padding-left: 62px;
+  }
+
   .topbar {
     margin-left: -12px;
     margin-right: -12px;
@@ -749,8 +810,7 @@ textarea:focus {
     padding-right: 12px;
   }
 
-  .actions,
-  .segmented {
+  .actions {
     width: 100%;
   }
 

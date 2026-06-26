@@ -87,7 +87,44 @@ function ServiceIcon({ service, size = "normal" }) {
   );
 }
 
-function Sidebar({ pages, activePageId, setActivePageId, syncStatus, onSyncNow, onNewPage, theme, setTheme, onHideMenu }) {
+function DisplayModeControl({ displayMode, setDisplayMode }) {
+  return h(
+    "div",
+    { className: "segmented", role: "group", "aria-label": "Service display mode" },
+    h(
+      "button",
+      {
+        type: "button",
+        className: displayMode === "cards" ? "active" : "",
+        "aria-pressed": displayMode === "cards",
+        onClick: () => setDisplayMode("cards")
+      },
+      "Grid"
+    ),
+    h(
+      "button",
+      {
+        type: "button",
+        className: displayMode === "compact" ? "active" : "",
+        "aria-pressed": displayMode === "compact",
+        onClick: () => setDisplayMode("compact")
+      },
+      "Compact"
+    ),
+    h(
+      "button",
+      {
+        type: "button",
+        className: displayMode === "hidden" ? "active" : "",
+        "aria-pressed": displayMode === "hidden",
+        onClick: () => setDisplayMode("hidden")
+      },
+      "Hidden"
+    )
+  );
+}
+
+function Sidebar({ pages, activePageId, setActivePageId, syncStatus, onSyncNow, onNewPage, theme, setTheme, onHideMenu, displayMode, setDisplayMode }) {
   return h(
     "aside",
     { className: "sidebar", "aria-label": "Pages" },
@@ -135,6 +172,12 @@ function Sidebar({ pages, activePageId, setActivePageId, syncStatus, onSyncNow, 
       h("button", { type: "button", disabled: syncStatus.running, onClick: onSyncNow }, "Sync")
     ),
     h(
+      "section",
+      { className: "settings-panel", "aria-label": "Settings" },
+      h("h2", null, "Settings"),
+      h("div", { className: "settings-row" }, h("span", null, "View"), h(DisplayModeControl, { displayMode, setDisplayMode }))
+    ),
+    h(
       "nav",
       { className: "page-nav" },
       pages.map((page) =>
@@ -154,7 +197,7 @@ function Sidebar({ pages, activePageId, setActivePageId, syncStatus, onSyncNow, 
   );
 }
 
-function Topbar({ page, countText, query, setQuery, onAddService, displayMode, setDisplayMode, menuHidden, onShowMenu }) {
+function Topbar({ page, countText, query, setQuery, onAddService }) {
   return h(
     "header",
     { className: "topbar" },
@@ -167,7 +210,6 @@ function Topbar({ page, countText, query, setQuery, onAddService, displayMode, s
     h(
       "div",
       { className: "actions" },
-      menuHidden && h("button", { className: "collapse-toggle floating-toggle", type: "button", "aria-label": "Show menu", onClick: onShowMenu }, ">>"),
       h(
         "label",
         { className: "search" },
@@ -178,40 +220,6 @@ function Topbar({ page, countText, query, setQuery, onAddService, displayMode, s
           value: query,
           onChange: (event) => setQuery(event.target.value)
         })
-      ),
-      h(
-        "div",
-        { className: "segmented", role: "group", "aria-label": "Service display mode" },
-        h(
-          "button",
-          {
-            type: "button",
-            className: displayMode === "cards" ? "active" : "",
-            "aria-pressed": displayMode === "cards",
-            onClick: () => setDisplayMode("cards")
-          },
-        "Grid"
-        ),
-        h(
-          "button",
-          {
-            type: "button",
-            className: displayMode === "compact" ? "active" : "",
-            "aria-pressed": displayMode === "compact",
-            onClick: () => setDisplayMode("compact")
-          },
-          "Compact"
-        ),
-        h(
-          "button",
-          {
-            type: "button",
-            className: displayMode === "hidden" ? "active" : "",
-            "aria-pressed": displayMode === "hidden",
-            onClick: () => setDisplayMode("hidden")
-          },
-          "Hidden"
-        )
       ),
       h("button", { className: "primary", type: "button", onClick: onAddService }, "Add service")
     )
@@ -577,6 +585,7 @@ function App() {
     h(
       "div",
       { className: menuHidden ? "app-shell menu-hidden" : "app-shell" },
+      menuHidden && h("button", { className: "menu-restore", type: "button", "aria-label": "Show menu", onClick: () => setMenuHidden(false) }, ">>"),
       !menuHidden &&
         h(Sidebar, {
           pages: catalog.pages,
@@ -587,7 +596,9 @@ function App() {
           onNewPage: () => setPageModalOpen(true),
           theme,
           setTheme,
-          onHideMenu: () => setMenuHidden(true)
+          onHideMenu: () => setMenuHidden(true),
+          displayMode,
+          setDisplayMode
         }),
       h(
         "main",
@@ -598,10 +609,6 @@ function App() {
           query,
           setQuery,
           onAddService: () => setServiceModal({ service: null, pageId: activePage.id }),
-          displayMode,
-          setDisplayMode,
-          menuHidden,
-          onShowMenu: () => setMenuHidden(false)
         }),
         h(ServiceGrid, {
           services: visibleServices,
