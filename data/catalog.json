@@ -2,7 +2,7 @@
   "meta": {
     "title": "Landingpage",
     "source": "Imported from data/services.yaml",
-    "updatedAt": "2026-06-26T15:46:34.912Z"
+    "updatedAt": "2026-06-26T21:21:02.879Z"
   },
   "pages": [
     {
@@ -1608,6 +1608,32 @@
             "router"
           ],
           "notes": "Imported from ChattoWeb.com. Search metadata seeded from service name, page, hostname, and description."
+        }
+      ]
+    },
+    {
+      "id": "work",
+      "name": "Work",
+      "description": "",
+      "services": [
+        {
+          "id": "jira-d4835167",
+          "name": "Jira",
+          "href": "https://www.atlassian.com/software/jira?campaign=19313277976&adgroup=144591217916&targetid=aud-1927178452745:kwd-855725830&matchtype=e&network=g&device=c&device_model=&creative=697067534071&keyword=jira&placement=&target=&ds_eid=700000001558501&ds_e1=GOOGLE&gad_source=1&gad_campaignid=19313277976&gbraid=0AAAAAD_uzhDlpDrhrrx3tRsnB00x7uY6s&gclid=Cj0KCQjwxvjRBhC2ARIsAI7KJa1KxrryE3k0olenIuVlvCBg02OlrT4-8CQY7sIQR5MTshC2wLeVSTAaAgWcEALw_wcB",
+          "description": "Project management and issue tracking tool.",
+          "icon": "jira-icon.png",
+          "tags": [
+            "Work"
+          ],
+          "category": "Work",
+          "keywords": [
+            "project",
+            "management",
+            "issues",
+            "tracking"
+          ],
+          "notes": "Integrates with various development tools.",
+          "widgetType": "projectManagement"
         }
       ]
     }
