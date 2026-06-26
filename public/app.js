@@ -175,7 +175,7 @@ function Sidebar({ pages, activePageId, setActivePageId, syncStatus, onSyncNow, 
       "section",
       { className: "settings-panel", "aria-label": "Settings" },
       h("h2", null, "Settings"),
-      h("div", { className: "settings-row" }, h("span", null, "View"), h(DisplayModeControl, { displayMode, setDisplayMode }))
+      h("div", { className: "settings-row" }, h("span", null, "View mode"), h(DisplayModeControl, { displayMode, setDisplayMode }))
     ),
     h(
       "nav",
@@ -197,7 +197,11 @@ function Sidebar({ pages, activePageId, setActivePageId, syncStatus, onSyncNow, 
   );
 }
 
-function Topbar({ page, countText, query, setQuery, onAddService }) {
+function Topbar({ page, countText, query, setQuery, onAddService, searchSource, searchLoading }) {
+  function updateQuery(value) {
+    setQuery(value);
+  }
+
   return h(
     "header",
     { className: "topbar" },
@@ -218,8 +222,9 @@ function Topbar({ page, countText, query, setQuery, onAddService }) {
           type: "search",
           placeholder: "Find a service",
           value: query,
-          onChange: (event) => setQuery(event.target.value)
-        })
+          onChange: (event) => updateQuery(event.target.value)
+        }),
+        query && h("small", null, searchLoading ? "Searching..." : searchSource === "ai" ? "Smart search" : "Smart local search")
       ),
       h("button", { className: "primary", type: "button", onClick: onAddService }, "Add service")
     )
@@ -355,6 +360,8 @@ function ServiceModal({ page, pages, editing, onClose, onSaved }) {
     widgetType: editing?.service?.widgetType || ""
   }));
   const [saving, setSaving] = useState(false);
+  const [aiFilling, setAiFilling] = useState(false);
+  const [formError, setFormError] = useState("");
   const service = editing?.service;
   const pageId = initialPageId;
 
@@ -365,6 +372,7 @@ function ServiceModal({ page, pages, editing, onClose, onSaved }) {
   async function submit(event) {
     event.preventDefault();
     setSaving(true);
+    setFormError("");
     const targetPage = pages.find((item) => item.id === form.pageId) || page;
     const payload = {
       ...form,
@@ -400,12 +408,44 @@ function ServiceModal({ page, pages, editing, onClose, onSaved }) {
     onSaved(catalog);
   }
 
+  async function autoFill() {
+    setAiFilling(true);
+    setFormError("");
+    try {
+      const targetPage = pages.find((item) => item.id === form.pageId) || page;
+      const result = await api("/api/ai/service-suggestion", {
+        method: "POST",
+        body: JSON.stringify({ ...form, category: targetPage.name })
+      });
+      const suggestion = result.suggestion || {};
+      setForm((current) => ({
+        ...current,
+        description: suggestion.description || current.description,
+        icon: suggestion.icon || current.icon,
+        widgetType: suggestion.widgetType || current.widgetType,
+        keywords: Array.isArray(suggestion.keywords) ? suggestion.keywords.join("\n") : current.keywords,
+        notes: suggestion.notes || current.notes
+      }));
+    } catch (error) {
+      setFormError(error.message);
+    } finally {
+      setAiFilling(false);
+    }
+  }
+
   return h(
     Modal,
     { title: service ? "Edit service" : "Add service", onClose },
     h(
       "form",
       { className: "modal-form", onSubmit: submit },
+      h(
+        "div",
+        { className: "modal-tools" },
+        h("span", null, "Use AI to fill the boring bits."),
+        h("button", { type: "button", className: "ghost", disabled: aiFilling || (!form.name && !form.href), onClick: autoFill }, aiFilling ? "Thinking" : "Auto fill")
+      ),
+      formError && h("p", { className: "form-error" }, formError),
       h("label", null, "Name", h("input", { required: true, value: form.name, onChange: (event) => update("name", event.target.value), autoFocus: true })),
       h("label", null, "URL", h("input", { required: true, type: "url", placeholder: "https://", value: form.href, onChange: (event) => update("href", event.target.value) })),
       h("label", null, "Description", h("textarea", { rows: 3, value: form.description, onChange: (event) => update("description", event.target.value) })),
@@ -485,6 +525,7 @@ function App() {
   const [serviceModal, setServiceModal] = useState(null);
   const [pageModalOpen, setPageModalOpen] = useState(false);
   const [loadError, setLoadError] = useState("");
+  const [smartSearch, setSmartSearch] = useState({ query: "", services: [], source: "local", loading: false });
 
   useEffect(() => {
     api("/api/catalog")
@@ -522,21 +563,75 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const normalizedQuery = query.trim();
+    if (!normalizedQuery) {
+      setSmartSearch({ query: "", services: [], source: "local", loading: false });
+      return;
+    }
+
+    let cancelled = false;
+    setSmartSearch((current) => ({ ...current, query: normalizedQuery, loading: true }));
+    const timeout = setTimeout(async () => {
+      try {
+        const result = await api("/api/search", {
+          method: "POST",
+          body: JSON.stringify({ query: normalizedQuery })
+        });
+        if (!cancelled) {
+          setSmartSearch({
+            query: normalizedQuery,
+            services: result.services || [],
+            source: result.source || "local",
+            loading: false
+          });
+        }
+      } catch {
+        if (!cancelled) setSmartSearch({ query: normalizedQuery, services: [], source: "local", loading: false });
+      }
+    }, 220);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timeout);
+    };
+  }, [query]);
+
   const activePage = useMemo(() => {
     if (!catalog?.pages?.length) return null;
+    if (activePageId === "all") {
+      return {
+        id: "all",
+        name: "All",
+        description: "Every service",
+        services: catalog.pages.flatMap((page) =>
+          page.services.map((service) => ({ ...service, pageId: page.id, pageName: page.name }))
+        )
+      };
+    }
     return catalog.pages.find((page) => page.id === activePageId) || catalog.pages[0];
   }, [catalog, activePageId]);
 
   const visibleServices = useMemo(() => {
     if (!catalog || !activePage) return [];
     const normalizedQuery = query.trim().toLowerCase();
+    if (normalizedQuery && smartSearch.query.toLowerCase() === normalizedQuery && !smartSearch.loading) {
+      return smartSearch.services;
+    }
     if (!normalizedQuery) return activePage.services;
-    return catalog.pages.flatMap((page) =>
+    const sourcePages = activePage.id === "all" ? catalog.pages : [activePage];
+    return sourcePages.flatMap((page) =>
       page.services
         .filter((service) => serviceSearchText(service, page).includes(normalizedQuery))
-        .map((service) => ({ ...service, pageId: page.id, pageName: page.name }))
+        .map((service) => ({ ...service, pageId: service.pageId || page.id, pageName: service.pageName || page.name }))
     );
-  }, [catalog, activePage, query]);
+  }, [catalog, activePage, query, smartSearch]);
+
+  const navPages = useMemo(() => {
+    if (!catalog?.pages?.length) return [];
+    const total = catalog.pages.reduce((count, page) => count + page.services.length, 0);
+    return [{ id: "all", name: "All", description: "Every service", services: Array.from({ length: total }) }, ...catalog.pages];
+  }, [catalog]);
 
   useEffect(() => {
     if (activePage) document.title = `${activePage.name} - Landingpage`;
@@ -555,6 +650,11 @@ function App() {
 
   function setDisplayMode(nextMode) {
     setDisplayModeState(nextMode);
+  }
+
+  function setSearchQuery(nextQuery) {
+    setQuery(nextQuery);
+    if (nextQuery.trim()) setActivePageId("all");
   }
 
   function setMenuHidden(nextHidden) {
@@ -578,6 +678,7 @@ function App() {
   }
 
   const countText = query ? `${visibleServices.length} global matches` : `${visibleServices.length} of ${activePage.services.length} services`;
+  const serviceTargetPage = activePage.id === "all" ? catalog.pages[0] : activePage;
 
   return h(
     React.Fragment,
@@ -588,7 +689,7 @@ function App() {
       menuHidden && h("button", { className: "menu-restore", type: "button", "aria-label": "Show menu", onClick: () => setMenuHidden(false) }, ">>"),
       !menuHidden &&
         h(Sidebar, {
-          pages: catalog.pages,
+          pages: navPages,
           activePageId: activePage.id,
           setActivePageId,
           syncStatus,
@@ -607,8 +708,10 @@ function App() {
           page: activePage,
           countText,
           query,
-          setQuery,
-          onAddService: () => setServiceModal({ service: null, pageId: activePage.id }),
+          setQuery: setSearchQuery,
+          searchSource: smartSearch.source,
+          searchLoading: smartSearch.loading,
+          onAddService: () => setServiceModal({ service: null, pageId: serviceTargetPage.id }),
         }),
         h(ServiceGrid, {
           services: visibleServices,

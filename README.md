@@ -10,6 +10,8 @@ Editable homelab landing page inspired by Homepage, seeded from the Ridgeway `se
 - Lets you create new pages for tool collections such as Microsoft, infrastructure, media, or client work.
 - Uses dark mode by default, with a light/dark toggle in the sidebar.
 - Searches globally when a query is entered, including service metadata such as category, aliases, keywords, notes, page names, and hostnames.
+- Uses smart search so vague queries such as `what was that routing solution I built` can find likely matches such as CloudFlare Router.
+- Can use OpenRouter AI to auto-fill service descriptions, icon names, widget types, and search metadata.
 - Writes app changes back to `data/services.yaml`.
 - Syncs service data with GitHub every 15 minutes by default.
 - Keeps the original imported YAML files in `data/imports/`.
@@ -39,6 +41,19 @@ GIT_SYNC_BRANCH=main
 GIT_SYNC_NAME="Landingpage Sync"
 GIT_SYNC_EMAIL="landingpage@local"
 ```
+
+## AI autofill and smart search
+
+Landingpage works without AI, using local smart-search synonyms for common homelab terms such as routing, storage, media, auth, monitoring, DNS, proxy, and tunnels.
+
+Set these environment variables to enable OpenRouter-backed metadata suggestions and richer smart search:
+
+```bash
+OPENROUTER_API_KEY="..."
+OPENROUTER_MODEL="openai/gpt-4o-mini"
+```
+
+The OpenRouter key is used only by the server. It is not sent to the browser or written into `services.yaml`.
 
 If Git reports a conflict or authentication issue, the sidebar sync status changes to `Needs attention` and the API reports the error at `/api/sync/status`.
 
