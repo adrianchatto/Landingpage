@@ -333,12 +333,13 @@ function Modal({ title, children, onClose, className = "" }) {
   );
 }
 
-function ServiceModal({ page, editing, onClose, onSaved }) {
+function ServiceModal({ page, pages, editing, onClose, onSaved }) {
+  const initialPageId = editing?.pageId || page.id;
   const [form, setForm] = useState(() => ({
     name: editing?.service?.name || "",
     href: editing?.service?.href || "",
     description: editing?.service?.description || "",
-    category: editing?.service?.category || "",
+    pageId: initialPageId,
     keywords: (editing?.service?.keywords || []).join("\n"),
     notes: editing?.service?.notes || "",
     icon: editing?.service?.icon || "",
@@ -346,7 +347,7 @@ function ServiceModal({ page, editing, onClose, onSaved }) {
   }));
   const [saving, setSaving] = useState(false);
   const service = editing?.service;
-  const pageId = editing?.pageId || page.id;
+  const pageId = initialPageId;
 
   function update(field, value) {
     setForm((current) => ({ ...current, [field]: value }));
@@ -355,17 +356,32 @@ function ServiceModal({ page, editing, onClose, onSaved }) {
   async function submit(event) {
     event.preventDefault();
     setSaving(true);
+    const targetPage = pages.find((item) => item.id === form.pageId) || page;
     const payload = {
       ...form,
+      category: targetPage.name,
       keywords: splitKeywords(form.keywords),
-      tags: [page.name]
+      tags: [targetPage.name]
     };
-    const path = service?.id ? `/api/pages/${pageId}/services/${service.id}` : `/api/pages/${pageId}/services`;
+    delete payload.pageId;
+
+    if (service?.id && targetPage.id !== pageId) {
+      await api(`/api/pages/${pageId}/services/${service.id}`, { method: "DELETE" });
+      payload.id = service.id;
+      const catalog = await api(`/api/pages/${targetPage.id}/services`, {
+        method: "POST",
+        body: JSON.stringify(payload)
+      });
+      onSaved(catalog, targetPage.id);
+      return;
+    }
+
+    const path = service?.id ? `/api/pages/${pageId}/services/${service.id}` : `/api/pages/${targetPage.id}/services`;
     const catalog = await api(path, {
       method: service?.id ? "PUT" : "POST",
       body: JSON.stringify(payload)
     });
-    onSaved(catalog);
+    onSaved(catalog, targetPage.id);
   }
 
   async function deleteService() {
@@ -384,7 +400,16 @@ function ServiceModal({ page, editing, onClose, onSaved }) {
       h("label", null, "Name", h("input", { required: true, value: form.name, onChange: (event) => update("name", event.target.value), autoFocus: true })),
       h("label", null, "URL", h("input", { required: true, type: "url", placeholder: "https://", value: form.href, onChange: (event) => update("href", event.target.value) })),
       h("label", null, "Description", h("textarea", { rows: 3, value: form.description, onChange: (event) => update("description", event.target.value) })),
-      h("label", null, "Category", h("input", { placeholder: "Storage, media, monitoring", value: form.category, onChange: (event) => update("category", event.target.value) })),
+      h(
+        "label",
+        null,
+        "Category",
+        h(
+          "select",
+          { value: form.pageId, onChange: (event) => update("pageId", event.target.value) },
+          pages.map((item) => h("option", { key: item.id, value: item.id }, item.name))
+        )
+      ),
       h("label", null, "Search metadata", h("textarea", { rows: 3, placeholder: "Aliases, tags, search terms", value: form.keywords, onChange: (event) => update("keywords", event.target.value) })),
       h("label", null, "Notes", h("textarea", { rows: 2, placeholder: "Optional internal context for search", value: form.notes, onChange: (event) => update("notes", event.target.value) })),
       h("label", null, "Icon", h("input", { placeholder: "plex.png or https://...", value: form.icon, onChange: (event) => update("icon", event.target.value) })),
@@ -520,10 +545,11 @@ function App() {
     setMenuHiddenState(nextHidden);
   }
 
-  function onCatalogSaved(nextCatalog) {
+  function onCatalogSaved(nextCatalog, nextPageId = null) {
     setCatalog(nextCatalog);
     setServiceModal(null);
     setPageModalOpen(false);
+    if (nextPageId) setActivePageId(nextPageId);
     if (!activePageId && nextCatalog.pages[0]) setActivePageId(nextCatalog.pages[0].id);
   }
 
@@ -579,7 +605,7 @@ function App() {
         })
       )
     ),
-    serviceModal && h(ServiceModal, { page: activePage, editing: serviceModal, onClose: () => setServiceModal(null), onSaved: onCatalogSaved }),
+    serviceModal && h(ServiceModal, { page: activePage, pages: catalog.pages, editing: serviceModal, onClose: () => setServiceModal(null), onSaved: onCatalogSaved }),
     pageModalOpen && h(PageModal, { onClose: () => setPageModalOpen(false), onSaved: (nextCatalog) => {
       setCatalog(nextCatalog);
       setActivePageId(nextCatalog.pages.at(-1).id);

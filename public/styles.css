@@ -50,6 +50,7 @@ body {
 
 button,
 input,
+select,
 textarea {
   font: inherit;
 }
@@ -307,6 +308,7 @@ h1 {
 }
 
 input,
+select,
 textarea {
   width: 100%;
   border: 1px solid var(--line);
@@ -318,6 +320,7 @@ textarea {
 }
 
 input:focus,
+select:focus,
 textarea:focus {
   border-color: color-mix(in srgb, var(--accent) 58%, transparent);
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 13%, transparent);
