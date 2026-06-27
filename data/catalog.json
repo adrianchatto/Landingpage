@@ -2,7 +2,7 @@
   "meta": {
     "title": "Landingpage",
     "source": "Imported from data/services.yaml",
-    "updatedAt": "2026-06-27T11:24:08.236Z"
+    "updatedAt": "2026-06-27T12:10:34.317Z"
   },
   "pages": [
     {
@@ -1659,6 +1659,32 @@
           ],
           "notes": "Use this widget to track the status and details of live projects.",
           "widgetType": "list"
+        }
+      ]
+    },
+    {
+      "id": "services",
+      "name": "Services",
+      "description": "",
+      "services": [
+        {
+          "id": "github-805714e4",
+          "name": "Github",
+          "href": "https://github.com",
+          "description": "Version control and collaboration platform for code.",
+          "icon": "github-icon.png",
+          "tags": [
+            "Services"
+          ],
+          "category": "Services",
+          "keywords": [
+            "version control",
+            "collaboration",
+            "code",
+            "repository"
+          ],
+          "notes": "Integrate with CI/CD pipelines for automated deployments.",
+          "widgetType": "service"
         }
       ]
     }

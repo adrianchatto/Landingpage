@@ -1487,3 +1487,22 @@
             - management
             - CloudInteract
             - work
+
+- Services:
+    - Github:
+        href: https://github.com
+        description: Version control and collaboration platform for code.
+        icon: github-icon.png
+        widget:
+          type: service
+        x-landingpage:
+          id: github-805714e4
+          category: Services
+          notes: Integrate with CI/CD pipelines for automated deployments.
+          tags:
+            - Services
+          keywords:
+            - version control
+            - collaboration
+            - code
+            - repository
