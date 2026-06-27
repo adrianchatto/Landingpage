@@ -131,8 +131,12 @@ function Sidebar({ pages, activePageId, setActivePageId, syncStatus, onSyncNow, 
     h(
       "div",
       { className: "brand" },
-      h("span", { className: "brand-mark" }, h("img", { src: "/favicon.svg", alt: "", loading: "eager" })),
-      h("div", null, h("strong", null, "Landingpage"), h("span", null, "Homelab services")),
+      h(
+        "a",
+        { className: "brand-home", href: "/", "aria-label": "Go to Landingpage home" },
+        h("span", { className: "brand-mark" }, h("img", { src: "/favicon.svg", alt: "", loading: "eager" })),
+        h("div", null, h("strong", null, "Landingpage"), h("span", null, "Homelab services"))
+      ),
       h(
         "button",
         {
@@ -151,39 +155,6 @@ function Sidebar({ pages, activePageId, setActivePageId, syncStatus, onSyncNow, 
       h("button", { className: "ghost sidebar-command", type: "button", onClick: onNewPage }, "New page")
     ),
     h(
-      "div",
-      { className: "sync-panel" },
-      h(
-        "div",
-        null,
-        h("strong", null, "Git Sync"),
-        h("span", { className: "sync-label" }, formatSyncStatus(syncStatus)),
-        h("small", { title: syncDetail(syncStatus) }, syncDetail(syncStatus))
-      ),
-      h("button", { type: "button", disabled: syncStatus.running, onClick: onSyncNow }, "Sync")
-    ),
-    h(
-      "section",
-      { className: "settings-panel", "aria-label": "Settings" },
-      h("h2", null, "Settings"),
-      h(
-        "div",
-        { className: "settings-row" },
-        h("span", null, "Theme"),
-        h(
-          "button",
-          {
-            className: "setting-toggle",
-            type: "button",
-            "aria-pressed": theme === "dark",
-            onClick: () => setTheme(theme === "dark" ? "light" : "dark")
-          },
-          theme === "dark" ? "Dark" : "Light"
-        )
-      ),
-      h("div", { className: "settings-row" }, h("span", null, "View mode"), h(DisplayModeControl, { displayMode, setDisplayMode }))
-    ),
-    h(
       "nav",
       { className: "page-nav" },
       pages.map((page) =>
@@ -198,6 +169,54 @@ function Sidebar({ pages, activePageId, setActivePageId, syncStatus, onSyncNow, 
           h("span", null, page.name),
           h("small", null, page.services.length)
         )
+      )
+    ),
+    h(
+      "div",
+      { className: "sidebar-bottom" },
+      h(
+        "section",
+        { className: "settings-panel", "aria-label": "Settings" },
+        h("h2", null, "Settings"),
+        h(
+          "div",
+          { className: "settings-row" },
+          h("span", null, "Theme"),
+          h(
+            "button",
+            {
+              className: "setting-toggle",
+              type: "button",
+              "aria-pressed": theme === "dark",
+              onClick: () => setTheme(theme === "dark" ? "light" : "dark")
+            },
+            theme === "dark" ? "Dark" : "Light"
+          )
+        ),
+        h("div", { className: "settings-row" }, h("span", null, "View mode"), h(DisplayModeControl, { displayMode, setDisplayMode }))
+      ),
+      h(
+        "div",
+        { className: "sync-panel" },
+        h(
+          "div",
+          null,
+          h("strong", null, "Git Sync"),
+          h("span", { className: "sync-label" }, formatSyncStatus(syncStatus)),
+          h("small", { title: syncDetail(syncStatus) }, syncDetail(syncStatus))
+        ),
+        h("button", { type: "button", disabled: syncStatus.running, onClick: onSyncNow }, "Sync")
+      ),
+      h(
+        "a",
+        {
+          className: "repo-link",
+          href: "https://github.com/adrianchatto/Landingpage",
+          target: "_blank",
+          rel: "noreferrer"
+        },
+        h("span", null, "GitHub repo"),
+        h("small", null, "↗")
       )
     )
   );
