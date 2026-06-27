@@ -267,15 +267,29 @@ html[data-theme="light"] .sidebar {
 }
 
 .settings-panel .segmented {
+  display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2px;
+  height: 30px;
   min-height: 30px;
   width: 100%;
+  padding: 2px;
 }
 
 .settings-panel .segmented button {
+  display: grid;
+  place-items: center;
+  height: 24px;
+  min-height: 24px;
   min-width: 0;
+  line-height: 1;
   padding: 0 4px;
   font-size: 0.7rem;
+}
+
+.settings-panel .segmented button.active {
+  height: 24px;
+  min-height: 24px;
 }
 
 .repo-link {
