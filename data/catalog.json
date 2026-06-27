@@ -2,7 +2,7 @@
   "meta": {
     "title": "Landingpage",
     "source": "Imported from data/services.yaml",
-    "updatedAt": "2026-06-27T09:59:17.423Z"
+    "updatedAt": "2026-06-27T11:24:08.236Z"
   },
   "pages": [
     {
@@ -1640,6 +1640,25 @@
           ],
           "notes": "Integrates with various development tools.",
           "widgetType": "projectManagement"
+        },
+        {
+          "id": "project-list-3d65fa89",
+          "name": "Project List",
+          "href": "https://cloudinteract-my.sharepoint.com/personal/adrian_chatto_cloudinteract_io/Lists/Live%20Projects/Weekly%20Project%20Report.aspx?env=WebViewList",
+          "description": "A comprehensive list of ongoing projects within CloudInteract.",
+          "icon": "dashboard-projects.png",
+          "tags": [
+            "Work"
+          ],
+          "category": "Work",
+          "keywords": [
+            "projects",
+            "management",
+            "CloudInteract",
+            "work"
+          ],
+          "notes": "Use this widget to track the status and details of live projects.",
+          "widgetType": "list"
         }
       ]
     }

@@ -1469,3 +1469,21 @@
             - management
             - issues
             - tracking
+
+    - Project List:
+        href: https://cloudinteract-my.sharepoint.com/personal/adrian_chatto_cloudinteract_io/Lists/Live%20Projects/Weekly%20Project%20Report.aspx?env=WebViewList
+        description: A comprehensive list of ongoing projects within CloudInteract.
+        icon: dashboard-projects.png
+        widget:
+          type: list
+        x-landingpage:
+          id: project-list-3d65fa89
+          category: Work
+          notes: Use this widget to track the status and details of live projects.
+          tags:
+            - Work
+          keywords:
+            - projects
+            - management
+            - CloudInteract
+            - work
