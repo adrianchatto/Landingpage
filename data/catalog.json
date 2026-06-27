@@ -2,7 +2,7 @@
   "meta": {
     "title": "Landingpage",
     "source": "Imported from data/services.yaml",
-    "updatedAt": "2026-06-26T21:21:31.652Z"
+    "updatedAt": "2026-06-27T07:11:33.715Z"
   },
   "pages": [
     {
@@ -1571,14 +1571,19 @@
           "id": "chattolabs-project-tracker-d0ac53d4",
           "name": "Chattolabs project tracker",
           "href": "https://chattolabs.com",
-          "description": "",
-          "icon": "",
+          "description": "A project tracking tool for managing Chattolabs initiatives.",
+          "icon": "project-tracker.png",
           "tags": [
             "Chattolab.com"
           ],
           "category": "Chattolab.com",
-          "keywords": [],
-          "notes": ""
+          "keywords": [
+            "project management",
+            "tracking",
+            "Chattolabs"
+          ],
+          "notes": "Integrates with existing workflows to streamline project updates.",
+          "widgetType": "tracker"
         },
         {
           "id": "cloudflare-172-22-20-2",

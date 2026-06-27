@@ -1408,13 +1408,20 @@
 
     - Chattolabs project tracker:
         href: https://chattolabs.com
+        description: A project tracking tool for managing Chattolabs initiatives.
+        icon: project-tracker.png
+        widget:
+          type: tracker
         x-landingpage:
           id: chattolabs-project-tracker-d0ac53d4
           category: Chattolab.com
+          notes: Integrates with existing workflows to streamline project updates.
           tags:
             - Chattolab.com
           keywords:
-            []
+            - project management
+            - tracking
+            - Chattolabs
 
     - CloudFlare Router:
         href: https://cloudflare.chattoweb.com
