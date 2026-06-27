@@ -120,6 +120,16 @@ html[data-theme="light"] .sidebar {
   display: block;
 }
 
+.brand .collapse-toggle {
+  justify-self: end;
+  width: 34px;
+  min-width: 34px;
+  height: 34px;
+  min-height: 34px;
+  padding: 0;
+  line-height: 1;
+}
+
 .brand strong,
 .brand span {
   display: block;
