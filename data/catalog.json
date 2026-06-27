@@ -2,7 +2,7 @@
   "meta": {
     "title": "Landingpage",
     "source": "Imported from data/services.yaml",
-    "updatedAt": "2026-06-27T12:10:34.317Z"
+    "updatedAt": "2026-06-27T12:12:17.149Z"
   },
   "pages": [
     {
@@ -1665,7 +1665,7 @@
     {
       "id": "services",
       "name": "Services",
-      "description": "",
+      "description": "Synced from services.yaml",
       "services": [
         {
           "id": "github-805714e4",
