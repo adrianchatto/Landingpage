@@ -121,6 +121,7 @@ html[data-theme="light"] .sidebar {
 }
 
 .brand .collapse-toggle {
+  align-self: center;
   justify-self: end;
   width: 34px;
   min-width: 34px;
@@ -128,6 +129,7 @@ html[data-theme="light"] .sidebar {
   min-height: 34px;
   padding: 0;
   line-height: 1;
+  font-size: 0.78rem;
 }
 
 .brand strong,
