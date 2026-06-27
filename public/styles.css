@@ -99,7 +99,7 @@ html[data-theme="light"] .sidebar {
 
 .brand {
   display: grid;
-  grid-template-columns: 34px minmax(0, 1fr);
+  grid-template-columns: 34px minmax(0, 1fr) 34px;
   gap: 10px;
   align-items: center;
 }
@@ -133,13 +133,13 @@ html[data-theme="light"] .sidebar {
   font-size: 0.82rem;
 }
 
-.sidebar-actions {
+.create-panel {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 34px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 7px;
 }
 
-.sidebar-actions button {
+.create-panel button {
   font-size: 0.86rem;
   white-space: nowrap;
 }
@@ -200,7 +200,8 @@ html[data-theme="light"] .sidebar {
 }
 
 .settings-panel {
-  display: block;
+  display: grid;
+  gap: 8px;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
   padding: 9px 0;
@@ -238,6 +239,18 @@ html[data-theme="light"] .sidebar {
   min-width: 0;
   padding: 0 4px;
   font-size: 0.7rem;
+}
+
+.setting-toggle {
+  justify-self: stretch;
+  min-height: 30px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  color: var(--ink);
+  font-size: 0.75rem;
+  font-weight: 820;
+  padding: 0 8px;
 }
 
 .sync-panel strong,
@@ -852,7 +865,7 @@ textarea:focus {
   }
 
   .segmented,
-  .sidebar-actions {
+  .create-panel {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 

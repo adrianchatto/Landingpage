@@ -124,7 +124,7 @@ function DisplayModeControl({ displayMode, setDisplayMode }) {
   );
 }
 
-function Sidebar({ pages, activePageId, setActivePageId, syncStatus, onSyncNow, onNewPage, theme, setTheme, onHideMenu, displayMode, setDisplayMode }) {
+function Sidebar({ pages, activePageId, setActivePageId, syncStatus, onSyncNow, onNewPage, onAddService, theme, setTheme, onHideMenu, displayMode, setDisplayMode }) {
   return h(
     "aside",
     { className: "sidebar", "aria-label": "Pages" },
@@ -132,22 +132,7 @@ function Sidebar({ pages, activePageId, setActivePageId, syncStatus, onSyncNow, 
       "div",
       { className: "brand" },
       h("span", { className: "brand-mark" }, "L"),
-      h("div", null, h("strong", null, "Landingpage"), h("span", null, "Homelab services"))
-    ),
-    h(
-      "div",
-      { className: "sidebar-actions" },
-      h("button", { className: "primary sidebar-command", type: "button", onClick: onNewPage }, "New page"),
-      h(
-        "button",
-        {
-          className: "ghost sidebar-command",
-          type: "button",
-          "aria-pressed": theme === "dark",
-          onClick: () => setTheme(theme === "dark" ? "light" : "dark")
-        },
-        "Theme"
-      ),
+      h("div", null, h("strong", null, "Landingpage"), h("span", null, "Homelab services")),
       h(
         "button",
         {
@@ -158,6 +143,12 @@ function Sidebar({ pages, activePageId, setActivePageId, syncStatus, onSyncNow, 
         },
         "<<"
       )
+    ),
+    h(
+      "section",
+      { className: "create-panel", "aria-label": "Create" },
+      h("button", { className: "primary sidebar-command", type: "button", onClick: onAddService }, "New service"),
+      h("button", { className: "ghost sidebar-command", type: "button", onClick: onNewPage }, "New page")
     ),
     h(
       "div",
@@ -175,6 +166,21 @@ function Sidebar({ pages, activePageId, setActivePageId, syncStatus, onSyncNow, 
       "section",
       { className: "settings-panel", "aria-label": "Settings" },
       h("h2", null, "Settings"),
+      h(
+        "div",
+        { className: "settings-row" },
+        h("span", null, "Theme"),
+        h(
+          "button",
+          {
+            className: "setting-toggle",
+            type: "button",
+            "aria-pressed": theme === "dark",
+            onClick: () => setTheme(theme === "dark" ? "light" : "dark")
+          },
+          theme === "dark" ? "Dark" : "Light"
+        )
+      ),
       h("div", { className: "settings-row" }, h("span", null, "View mode"), h(DisplayModeControl, { displayMode, setDisplayMode }))
     ),
     h(
@@ -197,7 +203,7 @@ function Sidebar({ pages, activePageId, setActivePageId, syncStatus, onSyncNow, 
   );
 }
 
-function Topbar({ page, countText, query, setQuery, onAddService, searchSource, searchLoading }) {
+function Topbar({ page, countText, query, setQuery, searchSource, searchLoading }) {
   function updateQuery(value) {
     setQuery(value);
   }
@@ -225,8 +231,7 @@ function Topbar({ page, countText, query, setQuery, onAddService, searchSource, 
           onChange: (event) => updateQuery(event.target.value)
         }),
         query && h("small", null, searchLoading ? "Searching..." : searchSource === "ai" ? "Smart search" : "Smart local search")
-      ),
-      h("button", { className: "primary", type: "button", onClick: onAddService }, "Add service")
+      )
     )
   );
 }
@@ -695,6 +700,7 @@ function App() {
           syncStatus,
           onSyncNow: syncNow,
           onNewPage: () => setPageModalOpen(true),
+          onAddService: () => setServiceModal({ service: null, pageId: serviceTargetPage.id }),
           theme,
           setTheme,
           onHideMenu: () => setMenuHidden(true),
@@ -711,7 +717,6 @@ function App() {
           setQuery: setSearchQuery,
           searchSource: smartSearch.source,
           searchLoading: smartSearch.loading,
-          onAddService: () => setServiceModal({ service: null, pageId: serviceTargetPage.id }),
         }),
         h(ServiceGrid, {
           services: visibleServices,
