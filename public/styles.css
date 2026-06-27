@@ -110,9 +110,14 @@ html[data-theme="light"] .sidebar {
   height: 34px;
   place-items: center;
   border-radius: var(--radius);
-  background: var(--accent);
-  color: var(--accent-ink);
-  font-weight: 900;
+  background: transparent;
+  overflow: hidden;
+}
+
+.brand-mark img {
+  width: 34px;
+  height: 34px;
+  display: block;
 }
 
 .brand strong,
@@ -365,7 +370,7 @@ textarea:focus {
 .search input {
   width: clamp(220px, 28vw, 360px);
   min-width: 0;
-  padding-left: 36px;
+  padding-left: 12px;
 }
 
 .search small {
@@ -374,16 +379,6 @@ textarea:focus {
   color: var(--soft);
   font-size: 0.68rem;
   font-weight: 760;
-}
-
-.search::before {
-  content: "/";
-  position: absolute;
-  left: 13px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--soft);
-  font-weight: 900;
 }
 
 .primary,

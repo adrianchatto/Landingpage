@@ -131,7 +131,7 @@ function Sidebar({ pages, activePageId, setActivePageId, syncStatus, onSyncNow, 
     h(
       "div",
       { className: "brand" },
-      h("span", { className: "brand-mark" }, "L"),
+      h("span", { className: "brand-mark" }, h("img", { src: "/favicon.svg", alt: "", loading: "eager" })),
       h("div", null, h("strong", null, "Landingpage"), h("span", null, "Homelab services")),
       h(
         "button",
