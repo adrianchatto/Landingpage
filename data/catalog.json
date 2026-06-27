@@ -2,7 +2,7 @@
   "meta": {
     "title": "Landingpage",
     "source": "Imported from data/services.yaml",
-    "updatedAt": "2026-06-27T07:11:33.715Z"
+    "updatedAt": "2026-06-27T09:59:17.423Z"
   },
   "pages": [
     {
@@ -1569,7 +1569,7 @@
         },
         {
           "id": "chattolabs-project-tracker-d0ac53d4",
-          "name": "Chattolabs project tracker",
+          "name": "Chattolabs Project Library",
           "href": "https://chattolabs.com",
           "description": "A project tracking tool for managing Chattolabs initiatives.",
           "icon": "project-tracker.png",
@@ -1580,7 +1580,8 @@
           "keywords": [
             "project management",
             "tracking",
-            "Chattolabs"
+            "Chattolabs",
+            "Library"
           ],
           "notes": "Integrates with existing workflows to streamline project updates.",
           "widgetType": "tracker"

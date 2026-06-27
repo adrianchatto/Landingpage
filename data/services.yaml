@@ -1406,7 +1406,7 @@
             - com
             - 172.122.30.10
 
-    - Chattolabs project tracker:
+    - Chattolabs Project Library:
         href: https://chattolabs.com
         description: A project tracking tool for managing Chattolabs initiatives.
         icon: project-tracker.png
@@ -1422,6 +1422,7 @@
             - project management
             - tracking
             - Chattolabs
+            - Library
 
     - CloudFlare Router:
         href: https://cloudflare.chattoweb.com
