@@ -2,7 +2,7 @@
   "meta": {
     "title": "Landingpage",
     "source": "Imported from data/services.yaml",
-    "updatedAt": "2026-06-27T12:12:17.149Z"
+    "updatedAt": "2026-06-27T14:30:21.869Z"
   },
   "pages": [
     {
@@ -535,6 +535,25 @@
             "net"
           ],
           "notes": "Imported from Media Management. Search metadata seeded from service name, page, hostname, and description."
+        },
+        {
+          "id": "jellyfin-3a1d4123",
+          "name": "JellyFin",
+          "href": "https://jellyfin.chattoweb.com",
+          "description": "Open-source media server for streaming your media library.",
+          "icon": "jellyfin-icon.png",
+          "tags": [
+            "Media Management"
+          ],
+          "category": "Media Management",
+          "keywords": [
+            "media server",
+            "streaming",
+            "open-source",
+            "library management"
+          ],
+          "notes": "Supports various media formats and devices.",
+          "widgetType": "Media Player"
         }
       ]
     },

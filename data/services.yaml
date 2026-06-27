@@ -471,6 +471,24 @@
             - chattoweb
             - net
 
+    - JellyFin:
+        href: https://jellyfin.chattoweb.com
+        description: Open-source media server for streaming your media library.
+        icon: jellyfin-icon.png
+        widget:
+          type: Media Player
+        x-landingpage:
+          id: jellyfin-3a1d4123
+          category: Media Management
+          notes: Supports various media formats and devices.
+          tags:
+            - Media Management
+          keywords:
+            - media server
+            - streaming
+            - open-source
+            - library management
+
 - Personal & Productivity:
     - Mealie:
         href: https://mealie.chattoweb.com
