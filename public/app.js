@@ -1,6 +1,21 @@
 const h = React.createElement;
 const { useEffect, useMemo, useState } = React;
 
+function useMediaQuery(query) {
+  const [matches, setMatches] = useState(() => (window.matchMedia ? window.matchMedia(query).matches : false));
+
+  useEffect(() => {
+    if (!window.matchMedia) return undefined;
+    const media = window.matchMedia(query);
+    const update = () => setMatches(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, [query]);
+
+  return matches;
+}
+
 async function api(path, options = {}) {
   const response = await fetch(path, {
     headers: { "content-type": "application/json" },
@@ -217,6 +232,96 @@ function Sidebar({ pages, activePageId, setActivePageId, syncStatus, onSyncNow, 
         },
         h("span", null, "GitHub repo"),
         h("small", null, "↗")
+      )
+    )
+  );
+}
+
+function MobileHeader({ onAddService, onOpenSettings }) {
+  return h(
+    "header",
+    { className: "mobile-header" },
+    h(
+      "a",
+      { className: "mobile-brand", href: "/", "aria-label": "Go to Landingpage home" },
+      h("span", { className: "brand-mark" }, h("img", { src: "/favicon.svg", alt: "", loading: "eager" })),
+      h("strong", null, "Landingpage")
+    ),
+    h("button", { className: "primary", type: "button", onClick: onAddService }, "New"),
+    h("button", { className: "collapse-toggle", type: "button", "aria-label": "Open settings", onClick: onOpenSettings }, "...")
+  );
+}
+
+function MobilePageNav({ pages, activePageId, setActivePageId }) {
+  return h(
+    "nav",
+    { className: "mobile-page-nav", "aria-label": "Pages" },
+    pages.map((page) =>
+      h(
+        "button",
+        {
+          key: page.id,
+          className: page.id === activePageId ? "active" : "",
+          type: "button",
+          onClick: () => setActivePageId(page.id)
+        },
+        h("span", null, page.name),
+        h("small", null, page.services.length)
+      )
+    )
+  );
+}
+
+function MobileSettingsModal({ syncStatus, onSyncNow, onNewPage, theme, setTheme, displayMode, setDisplayMode, onClose }) {
+  return h(
+    Modal,
+    { title: "Settings", onClose, className: "compact mobile-settings-modal" },
+    h(
+      "div",
+      { className: "mobile-settings" },
+      h("button", { className: "primary", type: "button", onClick: onNewPage }, "New page"),
+      h(
+        "section",
+        { className: "settings-panel", "aria-label": "Settings" },
+        h(
+          "div",
+          { className: "settings-row" },
+          h("span", null, "Theme"),
+          h(
+            "button",
+            {
+              className: "setting-toggle",
+              type: "button",
+              "aria-pressed": theme === "dark",
+              onClick: () => setTheme(theme === "dark" ? "light" : "dark")
+            },
+            theme === "dark" ? "Dark" : "Light"
+          )
+        ),
+        h("div", { className: "settings-row" }, h("span", null, "View mode"), h(DisplayModeControl, { displayMode, setDisplayMode }))
+      ),
+      h(
+        "div",
+        { className: "sync-panel" },
+        h(
+          "div",
+          null,
+          h("strong", null, "Git Sync"),
+          h("span", { className: "sync-label" }, formatSyncStatus(syncStatus)),
+          h("small", { title: syncDetail(syncStatus) }, syncDetail(syncStatus))
+        ),
+        h("button", { type: "button", disabled: syncStatus.running, onClick: onSyncNow }, "Sync")
+      ),
+      h(
+        "a",
+        {
+          className: "repo-link",
+          href: "https://github.com/adrianchatto/Landingpage",
+          target: "_blank",
+          rel: "noreferrer"
+        },
+        h("span", null, "GitHub repo"),
+        h("small", null, "open")
       )
     )
   );
@@ -533,6 +638,7 @@ function PageModal({ onClose, onSaved }) {
 }
 
 function App() {
+  const isMobile = useMediaQuery("(max-width: 720px), (pointer: coarse) and (max-width: 920px)");
   const [catalog, setCatalog] = useState(null);
   const [activePageId, setActivePageId] = useState(null);
   const [query, setQuery] = useState("");
@@ -548,6 +654,7 @@ function App() {
   const [syncStatus, setSyncStatus] = useState({ enabled: true, running: false, lastMessage: "Loading" });
   const [serviceModal, setServiceModal] = useState(null);
   const [pageModalOpen, setPageModalOpen] = useState(false);
+  const [mobileSettingsOpen, setMobileSettingsOpen] = useState(false);
   const [loadError, setLoadError] = useState("");
   const [smartSearch, setSmartSearch] = useState({ query: "", services: [], source: "local", loading: false });
 
@@ -709,9 +816,10 @@ function App() {
     null,
     h(
       "div",
-      { className: menuHidden ? "app-shell menu-hidden" : "app-shell" },
-      menuHidden && h("button", { className: "menu-restore", type: "button", "aria-label": "Show menu", onClick: () => setMenuHidden(false) }, ">>"),
-      !menuHidden &&
+      { className: ["app-shell", menuHidden && !isMobile ? "menu-hidden" : "", isMobile ? "is-mobile" : ""].filter(Boolean).join(" ") },
+      !isMobile && menuHidden && h("button", { className: "menu-restore", type: "button", "aria-label": "Show menu", onClick: () => setMenuHidden(false) }, ">>"),
+      !isMobile &&
+        !menuHidden &&
         h(Sidebar, {
           pages: navPages,
           activePageId: activePage.id,
@@ -729,6 +837,11 @@ function App() {
       h(
         "main",
         { className: "workspace" },
+        isMobile &&
+          h(MobileHeader, {
+            onAddService: () => setServiceModal({ service: null, pageId: serviceTargetPage.id }),
+            onOpenSettings: () => setMobileSettingsOpen(true)
+          }),
         h(Topbar, {
           page: activePage,
           countText,
@@ -744,9 +857,24 @@ function App() {
           displayMode,
           onEdit: (service, pageId) => setServiceModal({ service, pageId })
         })
-      )
+      ),
+      isMobile && h(MobilePageNav, { pages: navPages, activePageId: activePage.id, setActivePageId })
     ),
     serviceModal && h(ServiceModal, { page: activePage, pages: catalog.pages, editing: serviceModal, onClose: () => setServiceModal(null), onSaved: onCatalogSaved }),
+    mobileSettingsOpen &&
+      h(MobileSettingsModal, {
+        syncStatus,
+        onSyncNow: syncNow,
+        onNewPage: () => {
+          setMobileSettingsOpen(false);
+          setPageModalOpen(true);
+        },
+        theme,
+        setTheme,
+        displayMode,
+        setDisplayMode,
+        onClose: () => setMobileSettingsOpen(false)
+      }),
     pageModalOpen && h(PageModal, { onClose: () => setPageModalOpen(false), onSaved: (nextCatalog) => {
       setCatalog(nextCatalog);
       setActivePageId(nextCatalog.pages.at(-1).id);
@@ -756,3 +884,9 @@ function App() {
 }
 
 ReactDOM.createRoot(document.querySelector("#root")).render(h(App));
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js").catch(() => {});
+  });
+}
