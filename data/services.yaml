@@ -2,7 +2,7 @@
 # The x-landingpage block stores searchable metadata for the tool.
 
 - Locations:
-    - Oakdene:
+    - Adrian Ch@o:
         href: https://home.oakdene.it.com
         description: Oakdene homepage dashboard
         icon: home-assistant.png
@@ -11,7 +11,7 @@
           category: Locations
           notes: Imported from Locations. Search metadata seeded from service name, page, hostname, and description.
           tags:
-            - locations
+            - Locations
           keywords:
             - location
             - site

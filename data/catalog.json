@@ -2,7 +2,7 @@
   "meta": {
     "title": "Landingpage",
     "source": "Imported from data/services.yaml",
-    "updatedAt": "2026-06-27T14:30:21.869Z"
+    "updatedAt": "2026-06-28T05:44:23.253Z"
   },
   "pages": [
     {
@@ -12,12 +12,12 @@
       "services": [
         {
           "id": "oakdene",
-          "name": "Oakdene",
+          "name": "Adrian Ch@o",
           "href": "https://home.oakdene.it.com",
           "description": "Oakdene homepage dashboard",
           "icon": "home-assistant.png",
           "tags": [
-            "locations"
+            "Locations"
           ],
           "category": "Locations",
           "keywords": [
@@ -32,7 +32,8 @@
             "it",
             "com"
           ],
-          "notes": "Imported from Locations. Search metadata seeded from service name, page, hostname, and description."
+          "notes": "Imported from Locations. Search metadata seeded from service name, page, hostname, and description.",
+          "widgetType": ""
         },
         {
           "id": "ridgeway",
