@@ -760,6 +760,17 @@ textarea:focus {
   text-align: center;
 }
 
+.offline-banner {
+  margin: 0 0 14px;
+  border: 1px solid color-mix(in srgb, var(--warn) 46%, transparent);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--warn) 12%, transparent);
+  color: var(--warn);
+  padding: 10px 12px;
+  font-size: 0.82rem;
+  font-weight: 760;
+}
+
 .services-hidden p,
 .empty-state p,
 .load-state p {
@@ -774,6 +785,10 @@ textarea:focus {
 .load-state h1 {
   margin: 0 0 8px;
   color: var(--ink);
+}
+
+.load-state .primary {
+  margin-top: 16px;
 }
 
 .loader {

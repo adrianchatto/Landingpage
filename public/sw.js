@@ -1,9 +1,9 @@
-const CACHE_NAME = "landingpage-shell-mobile-pwa-1";
+const CACHE_NAME = "landingpage-shell-mobile-pwa-2";
 const SHELL_ASSETS = [
   "/",
   "/index.html",
-  "/styles.css?v=mobile-pwa-1",
-  "/app.js?v=mobile-pwa-1",
+  "/styles.css?v=mobile-pwa-2",
+  "/app.js?v=mobile-pwa-2",
   "/vendor/react/react.production.min.js",
   "/vendor/react-dom/react-dom.production.min.js",
   "/favicon.svg",
@@ -31,13 +31,12 @@ self.addEventListener("fetch", (event) => {
   if (requestUrl.pathname.startsWith("/api/")) return;
 
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      if (cached) return cached;
-      return fetch(event.request).then((response) => {
+    fetch(event.request)
+      .then((response) => {
         const copy = response.clone();
         caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
         return response;
-      });
-    })
+      })
+      .catch(() => caches.match(event.request).then((cached) => cached || caches.match("/index.html")))
   );
 });

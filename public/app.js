@@ -17,13 +17,40 @@ function useMediaQuery(query) {
 }
 
 async function api(path, options = {}) {
-  const response = await fetch(path, {
-    headers: { "content-type": "application/json" },
-    ...options
-  });
-  const data = await response.json();
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), options.timeoutMs || 12000);
+  let response;
+  try {
+    response = await fetch(path, {
+      headers: { "content-type": "application/json" },
+      ...options,
+      signal: options.signal || controller.signal
+    });
+  } catch (error) {
+    throw new Error(error.name === "AbortError" ? "The server took too long to respond." : "Could not reach the Landingpage API.");
+  } finally {
+    clearTimeout(timeout);
+  }
+  const data = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(data.error || "Request failed.");
   return data;
+}
+
+async function loadCatalog() {
+  try {
+    const data = await api("/api/catalog", { timeoutMs: 12000 });
+    localStorage.setItem("landingpage-catalog-cache", JSON.stringify({ savedAt: new Date().toISOString(), data }));
+    return { data, stale: false, error: "" };
+  } catch (error) {
+    const cached = localStorage.getItem("landingpage-catalog-cache");
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached);
+        if (parsed?.data?.pages) return { data: parsed.data, stale: true, error: error.message };
+      } catch {}
+    }
+    throw error;
+  }
 }
 
 function iconUrl(icon) {
@@ -656,15 +683,19 @@ function App() {
   const [pageModalOpen, setPageModalOpen] = useState(false);
   const [mobileSettingsOpen, setMobileSettingsOpen] = useState(false);
   const [loadError, setLoadError] = useState("");
+  const [staleCatalogMessage, setStaleCatalogMessage] = useState("");
   const [smartSearch, setSmartSearch] = useState({ query: "", services: [], source: "local", loading: false });
 
+  async function refreshCatalog() {
+    setLoadError("");
+    const result = await loadCatalog();
+    setCatalog(result.data);
+    setActivePageId((current) => current || result.data.pages[0]?.id);
+    setStaleCatalogMessage(result.stale ? `Showing last saved services because the live API did not respond: ${result.error}` : "");
+  }
+
   useEffect(() => {
-    api("/api/catalog")
-      .then((data) => {
-        setCatalog(data);
-        setActivePageId(data.pages[0]?.id);
-      })
-      .catch((error) => setLoadError(error.message));
+    refreshCatalog().catch((error) => setLoadError(error.message));
   }, []);
 
   useEffect(() => {
@@ -801,7 +832,13 @@ function App() {
   }
 
   if (loadError) {
-    return h("main", { className: "load-state" }, h("h1", null, "Could not load Landingpage"), h("p", null, loadError));
+    return h(
+      "main",
+      { className: "load-state" },
+      h("h1", null, "Could not load Landingpage"),
+      h("p", null, loadError),
+      h("button", { className: "primary", type: "button", onClick: () => refreshCatalog().catch((error) => setLoadError(error.message)) }, "Retry")
+    );
   }
 
   if (!catalog || !activePage) {
@@ -850,6 +887,7 @@ function App() {
           searchSource: smartSearch.source,
           searchLoading: smartSearch.loading,
         }),
+        staleCatalogMessage && h("p", { className: "offline-banner" }, staleCatalogMessage),
         h(ServiceGrid, {
           services: visibleServices,
           activePage,
