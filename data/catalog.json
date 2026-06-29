@@ -2,7 +2,7 @@
   "meta": {
     "title": "Landingpage",
     "source": "Imported from data/services.yaml",
-    "updatedAt": "2026-06-29T07:27:41.212Z"
+    "updatedAt": "2026-06-29T20:30:18.725Z"
   },
   "pages": [
     {
@@ -1723,6 +1723,25 @@
           ],
           "notes": "Integrate with CI/CD pipelines for automated deployments.",
           "widgetType": "service"
+        },
+        {
+          "id": "my-equiptment-5053496e",
+          "name": "My Equiptment",
+          "href": "https://app.notion.com/p/my-equiptment-38e25faf228881adb1bbde448be64ea9?source=copy_link",
+          "description": "Overview of all homelab equipment and status.",
+          "icon": "dashboard-icons/equipment.png",
+          "tags": [
+            "Services"
+          ],
+          "category": "Services",
+          "keywords": [
+            "homelab",
+            "equipment",
+            "status",
+            "overview"
+          ],
+          "notes": "Displays real-time status and health of all devices.",
+          "widgetType": "Equipment Status"
         }
       ]
     }

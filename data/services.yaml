@@ -1542,3 +1542,21 @@
             - collaboration
             - code
             - repository
+
+    - My Equiptment:
+        href: https://app.notion.com/p/my-equiptment-38e25faf228881adb1bbde448be64ea9?source=copy_link
+        description: Overview of all homelab equipment and status.
+        icon: dashboard-icons/equipment.png
+        widget:
+          type: Equipment Status
+        x-landingpage:
+          id: my-equiptment-5053496e
+          category: Services
+          notes: Displays real-time status and health of all devices.
+          tags:
+            - Services
+          keywords:
+            - homelab
+            - equipment
+            - status
+            - overview
