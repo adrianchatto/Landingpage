@@ -2,7 +2,7 @@
 # The x-landingpage block stores searchable metadata for the tool.
 
 - Locations:
-    - Adrian Ch@o:
+    - Oakdene:
         href: https://home.oakdene.it.com
         description: Oakdene homepage dashboard
         icon: home-assistant.png
@@ -1468,6 +1468,24 @@
             - com
             - 172.22.20.2
             - router
+
+    - "Ayse's CRM":
+        href: https://crm.chattolabs.com/
+        description: A customer relationship management tool for managing client interactions and data.
+        icon: dashboard-icons/crm.png
+        widget:
+          type: CRM
+        x-landingpage:
+          id: ayse-s-crm-e90b4ff7
+          category: Chattolab.com
+          notes: Integrates with various communication tools.
+          tags:
+            - Chattolab.com
+          keywords:
+            - CRM
+            - customer management
+            - client interactions
+            - data management
 
 - Work:
     - Jira:

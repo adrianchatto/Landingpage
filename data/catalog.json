@@ -2,7 +2,7 @@
   "meta": {
     "title": "Landingpage",
     "source": "Imported from data/services.yaml",
-    "updatedAt": "2026-06-28T05:49:34.454Z"
+    "updatedAt": "2026-06-29T07:21:27.782Z"
   },
   "pages": [
     {
@@ -12,7 +12,7 @@
       "services": [
         {
           "id": "oakdene",
-          "name": "Adrian Ch@o",
+          "name": "Oakdene",
           "href": "https://home.oakdene.it.com",
           "description": "Oakdene homepage dashboard",
           "icon": "home-assistant.png",
@@ -32,7 +32,8 @@
             "it",
             "com"
           ],
-          "notes": "Imported from Locations. Search metadata seeded from service name, page, hostname, and description."
+          "notes": "Imported from Locations. Search metadata seeded from service name, page, hostname, and description.",
+          "widgetType": ""
         },
         {
           "id": "ridgeway",
@@ -1633,6 +1634,25 @@
             "router"
           ],
           "notes": "Imported from ChattoWeb.com. Search metadata seeded from service name, page, hostname, and description."
+        },
+        {
+          "id": "ayse-s-crm-e90b4ff7",
+          "name": "Ayse's CRM",
+          "href": "https://crm.chattolabs.com/",
+          "description": "A customer relationship management tool for managing client interactions and data.",
+          "icon": "dashboard-icons/crm.png",
+          "tags": [
+            "Chattolab.com"
+          ],
+          "category": "Chattolab.com",
+          "keywords": [
+            "CRM",
+            "customer management",
+            "client interactions",
+            "data management"
+          ],
+          "notes": "Integrates with various communication tools.",
+          "widgetType": "CRM"
         }
       ]
     },
