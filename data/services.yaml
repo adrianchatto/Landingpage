@@ -1560,3 +1560,22 @@
             - equipment
             - status
             - overview
+
+    - Memory:
+        href: https://memory.chattoweb.com/
+        description: Monitor and manage memory usage across your homelab.
+        icon: dashboard-icons/memory.png
+        widget:
+          type: Gauge
+        x-landingpage:
+          id: memory-4d20e5ce
+          category: Services
+          notes: Useful for tracking RAM utilization and optimizing resource allocation.
+          tags:
+            - Services
+          keywords:
+            - memory
+            - usage
+            - monitoring
+            - performance
+            - Knowledge Base

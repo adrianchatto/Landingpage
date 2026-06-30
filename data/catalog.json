@@ -2,7 +2,7 @@
   "meta": {
     "title": "Landingpage",
     "source": "Imported from data/services.yaml",
-    "updatedAt": "2026-06-30T08:12:10.306Z"
+    "updatedAt": "2026-06-30T16:36:52.853Z"
   },
   "pages": [
     {
@@ -1742,6 +1742,26 @@
           ],
           "notes": "Displays real-time status and health of all devices.",
           "widgetType": "Equipment Status"
+        },
+        {
+          "id": "memory-4d20e5ce",
+          "name": "Memory",
+          "href": "https://memory.chattoweb.com/",
+          "description": "Monitor and manage memory usage across your homelab.",
+          "icon": "dashboard-icons/memory.png",
+          "tags": [
+            "Services"
+          ],
+          "category": "Services",
+          "keywords": [
+            "memory",
+            "usage",
+            "monitoring",
+            "performance",
+            "Knowledge Base"
+          ],
+          "notes": "Useful for tracking RAM utilization and optimizing resource allocation.",
+          "widgetType": "Gauge"
         }
       ]
     }
