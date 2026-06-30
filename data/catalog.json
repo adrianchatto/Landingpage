@@ -2,7 +2,7 @@
   "meta": {
     "title": "Landingpage",
     "source": "Imported from data/services.yaml",
-    "updatedAt": "2026-06-30T16:36:52.853Z"
+    "updatedAt": "2026-06-30T21:19:32.860Z"
   },
   "pages": [
     {
@@ -1725,25 +1725,6 @@
           "widgetType": "service"
         },
         {
-          "id": "my-equiptment-5053496e",
-          "name": "My Equiptment",
-          "href": "https://app.notion.com/p/my-equiptment-38e25faf228881adb1bbde448be64ea9?source=copy_link",
-          "description": "Overview of all homelab equipment and status.",
-          "icon": "dashboard-icons/equipment.png",
-          "tags": [
-            "Services"
-          ],
-          "category": "Services",
-          "keywords": [
-            "homelab",
-            "equipment",
-            "status",
-            "overview"
-          ],
-          "notes": "Displays real-time status and health of all devices.",
-          "widgetType": "Equipment Status"
-        },
-        {
           "id": "memory-4d20e5ce",
           "name": "Memory",
           "href": "https://memory.chattoweb.com/",
@@ -1762,6 +1743,46 @@
           ],
           "notes": "Useful for tracking RAM utilization and optimizing resource allocation.",
           "widgetType": "Gauge"
+        }
+      ]
+    },
+    {
+      "id": "equipment",
+      "name": "Equipment",
+      "description": "Hardware, devices, kit, inventory, warranties, and asset tracking.",
+      "services": [
+        {
+          "id": "my-equipment-notion",
+          "name": "My Equipment",
+          "href": "https://app.notion.com/p/my-equiptment-38e25faf228881adb1bbde448be64ea9?source=copy_link",
+          "description": "Equipment inventory and asset tracker in Notion.",
+          "icon": "notion.png",
+          "tags": [
+            "Equipment",
+            "Inventory",
+            "Assets",
+            "Hardware"
+          ],
+          "category": "Equipment",
+          "keywords": [
+            "equipment",
+            "equiptment",
+            "kit",
+            "hardware",
+            "devices",
+            "inventory",
+            "assets",
+            "asset tracking",
+            "serial numbers",
+            "warranty",
+            "purchase date",
+            "laptop",
+            "computer",
+            "phone",
+            "monitor",
+            "notion"
+          ],
+          "notes": "Pending full import: Notion authentication is required to read the private equipment records."
         }
       ]
     }

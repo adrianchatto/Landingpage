@@ -1543,24 +1543,6 @@
             - code
             - repository
 
-    - My Equiptment:
-        href: https://app.notion.com/p/my-equiptment-38e25faf228881adb1bbde448be64ea9?source=copy_link
-        description: Overview of all homelab equipment and status.
-        icon: dashboard-icons/equipment.png
-        widget:
-          type: Equipment Status
-        x-landingpage:
-          id: my-equiptment-5053496e
-          category: Services
-          notes: Displays real-time status and health of all devices.
-          tags:
-            - Services
-          keywords:
-            - homelab
-            - equipment
-            - status
-            - overview
-
     - Memory:
         href: https://memory.chattoweb.com/
         description: Monitor and manage memory usage across your homelab.
@@ -1579,3 +1561,35 @@
             - monitoring
             - performance
             - Knowledge Base
+
+- Equipment:
+    - My Equipment:
+        href: https://app.notion.com/p/my-equiptment-38e25faf228881adb1bbde448be64ea9?source=copy_link
+        description: Equipment inventory and asset tracker in Notion.
+        icon: notion.png
+        x-landingpage:
+          id: my-equipment-notion
+          category: Equipment
+          notes: "Pending full import: Notion authentication is required to read the private equipment records."
+          tags:
+            - Equipment
+            - Inventory
+            - Assets
+            - Hardware
+          keywords:
+            - equipment
+            - equiptment
+            - kit
+            - hardware
+            - devices
+            - inventory
+            - assets
+            - asset tracking
+            - serial numbers
+            - warranty
+            - purchase date
+            - laptop
+            - computer
+            - phone
+            - monitor
+            - notion
