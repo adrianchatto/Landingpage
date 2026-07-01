@@ -1,10 +1,10 @@
-const CACHE_NAME = "landingpage-shell-mobile-pwa-5";
-const DATA_CACHE_NAME = "landingpage-data-mobile-pwa-5";
+const CACHE_NAME = "landingpage-shell-mobile-pwa-6";
+const DATA_CACHE_NAME = "landingpage-data-mobile-pwa-6";
 const SHELL_ASSETS = [
   "/",
   "/index.html",
-  "/styles.css?v=mobile-pwa-5",
-  "/app.js?v=mobile-pwa-5",
+  "/styles.css?v=mobile-pwa-6",
+  "/app.js?v=mobile-pwa-6",
   "/vendor/react/react.production.min.js",
   "/vendor/react-dom/react-dom.production.min.js",
   "/favicon.svg",

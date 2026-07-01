@@ -13,12 +13,21 @@
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/apple-touch-icon.svg">
     <link rel="manifest" href="/manifest.webmanifest">
-    <link rel="stylesheet" href="/styles.css?v=mobile-pwa-5">
+    <script>
+      (() => {
+        const isPrivateHost = location.hostname === "172.22.20.5";
+        const isMobile = matchMedia("(max-width: 720px), (pointer: coarse) and (max-width: 920px)").matches;
+        if (isPrivateHost && isMobile) {
+          location.replace(`https://home.chattoweb.com${location.pathname}${location.search}${location.hash}`);
+        }
+      })();
+    </script>
+    <link rel="stylesheet" href="/styles.css?v=mobile-pwa-6">
   </head>
   <body>
     <div id="root"></div>
     <script src="/vendor/react/react.production.min.js"></script>
     <script src="/vendor/react-dom/react-dom.production.min.js"></script>
-    <script src="/app.js?v=mobile-pwa-5"></script>
+    <script src="/app.js?v=mobile-pwa-6"></script>
   </body>
 </html>
