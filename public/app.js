@@ -107,6 +107,88 @@ function serviceSearchText(service, page) {
     .toLowerCase();
 }
 
+function normalizeSearchText(value) {
+  return String(value || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9.:\-/]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function searchTerms(query) {
+  const stopWords = new Set(["a", "an", "and", "app", "for", "i", "me", "my", "of", "service", "solution", "system", "that", "the", "thing", "tool", "was", "what"]);
+  return normalizeSearchText(query)
+    .split(" ")
+    .filter((term) => term.length > 1 && !stopWords.has(term));
+}
+
+function hostnameText(href) {
+  try {
+    return normalizeSearchText(new URL(href).hostname.replace(/^www\./, ""));
+  } catch {
+    return "";
+  }
+}
+
+function scoreField(text, term, weights) {
+  if (!text) return 0;
+  if (text === term) return weights.exact;
+  if (text.startsWith(term)) return weights.starts;
+  if (text.split(" ").some((part) => part === term)) return weights.word;
+  if (text.includes(term)) return weights.contains;
+  return 0;
+}
+
+function rankService(service, page, query, terms) {
+  const phrase = normalizeSearchText(query);
+  const name = normalizeSearchText(service.name);
+  const host = hostnameText(service.href);
+  const keywords = normalizeSearchText([...(service.keywords || []), ...(service.tags || [])].join(" "));
+  const category = normalizeSearchText([service.category, page && page.name, page && page.description].filter(Boolean).join(" "));
+  const description = normalizeSearchText([service.description, service.widgetType].filter(Boolean).join(" "));
+  const notes = normalizeSearchText(service.notes);
+  const haystack = [name, host, keywords, category, description, notes].filter(Boolean).join(" ");
+
+  if (!terms.every((term) => haystack.includes(term))) return null;
+
+  let score = 0;
+  if (phrase && name === phrase) score += 1000;
+  if (phrase && name.startsWith(phrase)) score += 700;
+  if (phrase && host.includes(phrase)) score += 250;
+  if (phrase && haystack.includes(phrase)) score += 120;
+
+  for (const term of terms) {
+    score += scoreField(name, term, { exact: 240, starts: 180, word: 140, contains: 90 });
+    score += scoreField(host, term, { exact: 130, starts: 100, word: 80, contains: 55 });
+    score += scoreField(keywords, term, { exact: 90, starts: 72, word: 62, contains: 35 });
+    score += scoreField(category, term, { exact: 52, starts: 42, word: 34, contains: 18 });
+    score += scoreField(description, term, { exact: 42, starts: 34, word: 28, contains: 14 });
+    score += scoreField(notes, term, { exact: 22, starts: 18, word: 14, contains: 7 });
+  }
+
+  return score;
+}
+
+function rankedServices(catalog, activePage, query) {
+  const terms = searchTerms(query);
+  if (!terms.length) return activePage.services;
+  const sourcePages = activePage.id === "all" ? catalog.pages : [activePage];
+  return sourcePages
+    .reduce(
+      (services, page) =>
+        services.concat(
+          (page.services || []).map((service) => ({
+            service: { ...service, pageId: service.pageId || page.id, pageName: service.pageName || page.name },
+            score: rankService(service, page, query, terms)
+          }))
+        ),
+      []
+    )
+    .filter((item) => item.score !== null)
+    .sort((a, b) => b.score - a.score || a.service.name.localeCompare(b.service.name))
+    .map((item) => item.service);
+}
+
 function formatSyncStatus(status) {
   if (!status.enabled) return "Disabled";
   if (status.running) return "Running";
@@ -373,7 +455,7 @@ function MobileSettingsModal({ syncStatus, onSyncNow, onNewPage, theme, setTheme
   );
 }
 
-function Topbar({ page, countText, query, setQuery, searchSource, searchLoading }) {
+function Topbar({ page, countText, query, setQuery }) {
   function updateQuery(value) {
     setQuery(value);
   }
@@ -400,7 +482,7 @@ function Topbar({ page, countText, query, setQuery, searchSource, searchLoading 
           value: query,
           onChange: (event) => updateQuery(event.target.value)
         }),
-        query && h("small", null, searchLoading ? "Searching..." : searchSource === "ai" ? "Smart search" : "Smart local search")
+        query && h("small", null, "Ranked local search")
       )
     )
   );
@@ -704,7 +786,6 @@ function App() {
   const [mobileSettingsOpen, setMobileSettingsOpen] = useState(false);
   const [loadError, setLoadError] = useState("");
   const [staleCatalogMessage, setStaleCatalogMessage] = useState("");
-  const [smartSearch, setSmartSearch] = useState({ query: "", services: [], source: "local", loading: false });
 
   async function refreshCatalog() {
     setLoadError("");
@@ -745,40 +826,6 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    const normalizedQuery = query.trim();
-    if (!normalizedQuery) {
-      setSmartSearch({ query: "", services: [], source: "local", loading: false });
-      return;
-    }
-
-    let cancelled = false;
-    setSmartSearch((current) => ({ ...current, query: normalizedQuery, loading: true }));
-    const timeout = setTimeout(async () => {
-      try {
-        const result = await api("/api/search", {
-          method: "POST",
-          body: JSON.stringify({ query: normalizedQuery })
-        });
-        if (!cancelled) {
-          setSmartSearch({
-            query: normalizedQuery,
-            services: result.services || [],
-            source: result.source || "local",
-            loading: false
-          });
-        }
-      } catch {
-        if (!cancelled) setSmartSearch({ query: normalizedQuery, services: [], source: "local", loading: false });
-      }
-    }, 220);
-
-    return () => {
-      cancelled = true;
-      clearTimeout(timeout);
-    };
-  }, [query]);
-
   const activePage = useMemo(() => {
     if (!catalog || !catalog.pages || !catalog.pages.length) return null;
     if (activePageId === "all") {
@@ -798,22 +845,8 @@ function App() {
 
   const visibleServices = useMemo(() => {
     if (!catalog || !activePage) return [];
-    const normalizedQuery = query.trim().toLowerCase();
-    if (normalizedQuery && smartSearch.query.toLowerCase() === normalizedQuery && !smartSearch.loading) {
-      return smartSearch.services;
-    }
-    if (!normalizedQuery) return activePage.services;
-    const sourcePages = activePage.id === "all" ? catalog.pages : [activePage];
-    return sourcePages.reduce(
-      (services, page) =>
-        services.concat(
-          page.services
-        .filter((service) => serviceSearchText(service, page).includes(normalizedQuery))
-        .map((service) => ({ ...service, pageId: service.pageId || page.id, pageName: service.pageName || page.name }))
-        ),
-      []
-    );
-  }, [catalog, activePage, query, smartSearch]);
+    return rankedServices(catalog, activePage, query);
+  }, [catalog, activePage, query]);
 
   const navPages = useMemo(() => {
     if (!catalog || !catalog.pages || !catalog.pages.length) return [];
@@ -910,8 +943,6 @@ function App() {
           countText,
           query,
           setQuery: setSearchQuery,
-          searchSource: smartSearch.source,
-          searchLoading: smartSearch.loading,
         }),
         staleCatalogMessage && h("p", { className: "offline-banner" }, staleCatalogMessage),
         h(ServiceGrid, {
