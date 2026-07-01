@@ -2,7 +2,7 @@
   "meta": {
     "title": "Landingpage",
     "source": "Imported from data/services.yaml",
-    "updatedAt": "2026-07-01T12:04:36.755Z"
+    "updatedAt": "2026-07-01T12:12:43.157Z"
   },
   "pages": [
     {
@@ -1762,7 +1762,7 @@
     {
       "id": "ovh-cloud",
       "name": "OVH Cloud",
-      "description": "",
+      "description": "Synced from services.yaml",
       "services": [
         {
           "id": "docker-green-9928009c",
@@ -1808,8 +1808,7 @@
             "release",
             "com"
           ],
-          "notes": "Imported from ChattoWeb.com. Search metadata seeded from service name, page, hostname, and description.",
-          "widgetType": ""
+          "notes": "Imported from ChattoWeb.com. Search metadata seeded from service name, page, hostname, and description."
         },
         {
           "id": "docker-blue-57-129-129-85-8e821062",
