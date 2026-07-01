@@ -2,7 +2,7 @@
   "meta": {
     "title": "Landingpage",
     "source": "Imported from data/services.yaml",
-    "updatedAt": "2026-07-01T12:16:36.980Z"
+    "updatedAt": "2026-07-01T12:48:49.146Z"
   },
   "pages": [
     {
@@ -1846,6 +1846,25 @@
           ],
           "notes": "Ensure to check connection status and performance metrics.",
           "widgetType": "DatabaseStatus"
+        },
+        {
+          "id": "cloudflare-tunnel-4d87dd07",
+          "name": "CloudFlare Tunnel",
+          "href": "https://tunnel.chattoweb.com/",
+          "description": "Manage and monitor CloudFlare Tunnel connections.",
+          "icon": "cloudflare-tunnel.png",
+          "tags": [
+            "OVH Cloud"
+          ],
+          "category": "OVH Cloud",
+          "keywords": [
+            "CloudFlare",
+            "Tunnel",
+            "VPN",
+            "Security"
+          ],
+          "notes": "Useful for securing access to services without exposing them directly to the internet.",
+          "widgetType": "service"
         }
       ]
     }

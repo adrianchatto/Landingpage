@@ -1647,3 +1647,21 @@
             - database
             - monitoring
             - OVH Cloud
+
+    - CloudFlare Tunnel:
+        href: https://tunnel.chattoweb.com/
+        description: Manage and monitor CloudFlare Tunnel connections.
+        icon: cloudflare-tunnel.png
+        widget:
+          type: service
+        x-landingpage:
+          id: cloudflare-tunnel-4d87dd07
+          category: OVH Cloud
+          notes: Useful for securing access to services without exposing them directly to the internet.
+          tags:
+            - OVH Cloud
+          keywords:
+            - CloudFlare
+            - Tunnel
+            - VPN
+            - Security
