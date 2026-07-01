@@ -2,7 +2,7 @@
   "meta": {
     "title": "Landingpage",
     "source": "Imported from data/services.yaml",
-    "updatedAt": "2026-07-01T12:12:43.157Z"
+    "updatedAt": "2026-07-01T12:16:36.980Z"
   },
   "pages": [
     {
@@ -1828,6 +1828,24 @@
           ],
           "notes": "Access your Docker dashboard at the provided URL.",
           "widgetType": "container"
+        },
+        {
+          "id": "database-57-129-128-61-2034069f",
+          "name": "Database - 57.129.128.61",
+          "href": "https://57.129.128.61:9090/",
+          "description": "Monitor and manage your database instance.",
+          "icon": "dashboard-icons/database.png",
+          "tags": [
+            "OVH Cloud"
+          ],
+          "category": "OVH Cloud",
+          "keywords": [
+            "database",
+            "monitoring",
+            "OVH Cloud"
+          ],
+          "notes": "Ensure to check connection status and performance metrics.",
+          "widgetType": "DatabaseStatus"
         }
       ]
     }

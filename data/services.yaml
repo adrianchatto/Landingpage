@@ -1630,3 +1630,20 @@
             - containers
             - OVH
             - cloud
+
+    - Database - 57.129.128.61:
+        href: https://57.129.128.61:9090/
+        description: Monitor and manage your database instance.
+        icon: dashboard-icons/database.png
+        widget:
+          type: DatabaseStatus
+        x-landingpage:
+          id: database-57-129-128-61-2034069f
+          category: OVH Cloud
+          notes: Ensure to check connection status and performance metrics.
+          tags:
+            - OVH Cloud
+          keywords:
+            - database
+            - monitoring
+            - OVH Cloud
