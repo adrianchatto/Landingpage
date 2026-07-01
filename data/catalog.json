@@ -2,7 +2,7 @@
   "meta": {
     "title": "Landingpage",
     "source": "Imported from data/services.yaml",
-    "updatedAt": "2026-06-30T21:19:32.860Z"
+    "updatedAt": "2026-07-01T11:56:34.295Z"
   },
   "pages": [
     {
@@ -1276,33 +1276,6 @@
           "notes": "Imported from ChattoWeb.com. Search metadata seeded from service name, page, hostname, and description."
         },
         {
-          "id": "ovh-deploy",
-          "name": "OVH Deploy",
-          "href": "https://deploy.chattoweb.com",
-          "description": "OVH Deploy",
-          "icon": "cockpit.png",
-          "tags": [
-            "chattoweb.com"
-          ],
-          "category": "ChattoWeb.com",
-          "keywords": [
-            "chattoweb",
-            "production",
-            "prod",
-            "docker",
-            "cloudflare",
-            "deploy",
-            "monitoring",
-            "finance",
-            "ovh",
-            "deployment",
-            "server",
-            "release",
-            "com"
-          ],
-          "notes": "Imported from ChattoWeb.com. Search metadata seeded from service name, page, hostname, and description."
-        },
-        {
           "id": "cockpit-172-22-20-5",
           "name": "CockPit 172.22.20.5",
           "href": "https://cockpitdockerprod.chattoweb.com",
@@ -1783,6 +1756,60 @@
             "notion"
           ],
           "notes": "Pending full import: Notion authentication is required to read the private equipment records."
+        }
+      ]
+    },
+    {
+      "id": "ovh-cloud",
+      "name": "OVH Cloud",
+      "description": "",
+      "services": [
+        {
+          "id": "docker-green-9928009c",
+          "name": "Docker Green - 57.129.128.119",
+          "href": "https://57.129.128.119:9090/",
+          "description": "Monitor and manage Docker containers in your homelab.",
+          "icon": "docker-icon.png",
+          "tags": [
+            "OVH Cloud"
+          ],
+          "category": "OVH Cloud",
+          "keywords": [
+            "Docker",
+            "containers",
+            "homelab",
+            "monitoring"
+          ],
+          "notes": "Integrates with Docker API for real-time stats.",
+          "widgetType": "container-management"
+        },
+        {
+          "id": "ovh-deploy",
+          "name": "OVH Deploy",
+          "href": "https://deploy.chattoweb.com",
+          "description": "OVH Deploy",
+          "icon": "cockpit.png",
+          "tags": [
+            "OVH Cloud"
+          ],
+          "category": "OVH Cloud",
+          "keywords": [
+            "chattoweb",
+            "production",
+            "prod",
+            "docker",
+            "cloudflare",
+            "deploy",
+            "monitoring",
+            "finance",
+            "ovh",
+            "deployment",
+            "server",
+            "release",
+            "com"
+          ],
+          "notes": "Imported from ChattoWeb.com. Search metadata seeded from service name, page, hostname, and description.",
+          "widgetType": ""
         }
       ]
     }
