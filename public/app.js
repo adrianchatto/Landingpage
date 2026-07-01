@@ -9,11 +9,29 @@ function useMediaQuery(query) {
     const media = window.matchMedia(query);
     const update = () => setMatches(media.matches);
     update();
-    media.addEventListener("change", update);
-    return () => media.removeEventListener("change", update);
+    if (media.addEventListener) {
+      media.addEventListener("change", update);
+      return () => media.removeEventListener("change", update);
+    }
+    media.addListener(update);
+    return () => media.removeListener(update);
   }, [query]);
 
   return matches;
+}
+
+function readStoredValue(key, fallback = "") {
+  try {
+    return localStorage.getItem(key) || fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function writeStoredValue(key, value) {
+  try {
+    localStorage.setItem(key, value);
+  } catch {}
 }
 
 async function api(path, options = {}) {
@@ -39,10 +57,10 @@ async function api(path, options = {}) {
 async function loadCatalog() {
   try {
     const data = await api("/api/catalog", { timeoutMs: 12000 });
-    localStorage.setItem("landingpage-catalog-cache", JSON.stringify({ savedAt: new Date().toISOString(), data }));
+    writeStoredValue("landingpage-catalog-cache", JSON.stringify({ savedAt: new Date().toISOString(), data }));
     return { data, stale: false, error: "" };
   } catch (error) {
-    const cached = localStorage.getItem("landingpage-catalog-cache");
+    const cached = readStoredValue("landingpage-catalog-cache");
     if (cached) {
       try {
         const parsed = JSON.parse(cached);
@@ -669,14 +687,14 @@ function App() {
   const [catalog, setCatalog] = useState(null);
   const [activePageId, setActivePageId] = useState(null);
   const [query, setQuery] = useState("");
-  const [theme, setThemeState] = useState(() => localStorage.getItem("landingpage-theme") || "dark");
+  const [theme, setThemeState] = useState(() => readStoredValue("landingpage-theme", "dark"));
   const [displayMode, setDisplayModeState] = useState(() => {
-    if (localStorage.getItem("landingpage-ui-version") !== "2") return "compact";
-    return localStorage.getItem("landingpage-display-mode") || "compact";
+    if (readStoredValue("landingpage-ui-version") !== "2") return "compact";
+    return readStoredValue("landingpage-display-mode", "compact");
   });
   const [menuHidden, setMenuHiddenState] = useState(() => {
-    if (localStorage.getItem("landingpage-ui-version") !== "2") return false;
-    return localStorage.getItem("landingpage-menu-hidden") === "true";
+    if (readStoredValue("landingpage-ui-version") !== "2") return false;
+    return readStoredValue("landingpage-menu-hidden") === "true";
   });
   const [syncStatus, setSyncStatus] = useState({ enabled: true, running: false, lastMessage: "Loading" });
   const [serviceModal, setServiceModal] = useState(null);
@@ -700,16 +718,16 @@ function App() {
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
-    localStorage.setItem("landingpage-theme", theme);
+    writeStoredValue("landingpage-theme", theme);
   }, [theme]);
 
   useEffect(() => {
-    localStorage.setItem("landingpage-ui-version", "2");
-    localStorage.setItem("landingpage-display-mode", displayMode);
+    writeStoredValue("landingpage-ui-version", "2");
+    writeStoredValue("landingpage-display-mode", displayMode);
   }, [displayMode]);
 
   useEffect(() => {
-    localStorage.setItem("landingpage-menu-hidden", String(menuHidden));
+    writeStoredValue("landingpage-menu-hidden", String(menuHidden));
   }, [menuHidden]);
 
   useEffect(() => {
@@ -915,7 +933,7 @@ function App() {
       }),
     pageModalOpen && h(PageModal, { onClose: () => setPageModalOpen(false), onSaved: (nextCatalog) => {
       setCatalog(nextCatalog);
-      setActivePageId(nextCatalog.pages.at(-1).id);
+      setActivePageId(nextCatalog.pages[nextCatalog.pages.length - 1].id);
       setPageModalOpen(false);
     } })
   );

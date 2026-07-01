@@ -1,9 +1,9 @@
-const CACHE_NAME = "landingpage-shell-mobile-pwa-2";
+const CACHE_NAME = "landingpage-shell-mobile-pwa-3";
 const SHELL_ASSETS = [
   "/",
   "/index.html",
-  "/styles.css?v=mobile-pwa-2",
-  "/app.js?v=mobile-pwa-2",
+  "/styles.css?v=mobile-pwa-3",
+  "/app.js?v=mobile-pwa-3",
   "/vendor/react/react.production.min.js",
   "/vendor/react-dom/react-dom.production.min.js",
   "/favicon.svg",
