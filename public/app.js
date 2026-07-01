@@ -35,19 +35,20 @@ function writeStoredValue(key, value) {
 }
 
 async function api(path, options = {}) {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), options.timeoutMs || 12000);
+  const controller = window.AbortController ? new AbortController() : null;
+  const timeout = controller ? setTimeout(() => controller.abort(), options.timeoutMs || 12000) : null;
   let response;
   try {
-    response = await fetch(path, {
+    const fetchOptions = {
       headers: { "content-type": "application/json" },
-      ...options,
-      signal: options.signal || controller.signal
-    });
+      ...options
+    };
+    if (controller) fetchOptions.signal = options.signal || controller.signal;
+    response = await fetch(path, fetchOptions);
   } catch (error) {
     throw new Error(error.name === "AbortError" ? "The server took too long to respond." : "Could not reach the Landingpage API.");
   } finally {
-    clearTimeout(timeout);
+    if (timeout) clearTimeout(timeout);
   }
   const data = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(data.error || "Request failed.");
@@ -64,7 +65,7 @@ async function loadCatalog() {
     if (cached) {
       try {
         const parsed = JSON.parse(cached);
-        if (parsed?.data?.pages) return { data: parsed.data, stale: true, error: error.message };
+        if (parsed && parsed.data && parsed.data.pages) return { data: parsed.data, stale: true, error: error.message };
       } catch {}
     }
     throw error;
@@ -96,8 +97,8 @@ function serviceSearchText(service, page) {
     service.category,
     service.notes,
     service.widgetType,
-    page?.name,
-    page?.description,
+    page && page.name,
+    page && page.description,
     ...(service.tags || []),
     ...(service.keywords || [])
   ]
@@ -384,7 +385,7 @@ function Topbar({ page, countText, query, setQuery, searchSource, searchLoading 
       "div",
       { className: "title-block" },
       h("p", { className: "eyebrow" }, countText),
-      h("h1", null, page?.name || "Landingpage")
+      h("h1", null, (page && page.name) || "Landingpage")
     ),
     h(
       "div",
@@ -522,21 +523,22 @@ function Modal({ title, children, onClose, className = "" }) {
 }
 
 function ServiceModal({ page, pages, editing, onClose, onSaved }) {
-  const initialPageId = editing?.pageId || page.id;
+  const initialPageId = (editing && editing.pageId) || page.id;
+  const editingService = editing && editing.service;
   const [form, setForm] = useState(() => ({
-    name: editing?.service?.name || "",
-    href: editing?.service?.href || "",
-    description: editing?.service?.description || "",
+    name: (editingService && editingService.name) || "",
+    href: (editingService && editingService.href) || "",
+    description: (editingService && editingService.description) || "",
     pageId: initialPageId,
-    keywords: (editing?.service?.keywords || []).join("\n"),
-    notes: editing?.service?.notes || "",
-    icon: editing?.service?.icon || "",
-    widgetType: editing?.service?.widgetType || ""
+    keywords: ((editingService && editingService.keywords) || []).join("\n"),
+    notes: (editingService && editingService.notes) || "",
+    icon: (editingService && editingService.icon) || "",
+    widgetType: (editingService && editingService.widgetType) || ""
   }));
   const [saving, setSaving] = useState(false);
   const [aiFilling, setAiFilling] = useState(false);
   const [formError, setFormError] = useState("");
-  const service = editing?.service;
+  const service = editingService;
   const pageId = initialPageId;
 
   function update(field, value) {
@@ -556,7 +558,7 @@ function ServiceModal({ page, pages, editing, onClose, onSaved }) {
     };
     delete payload.pageId;
 
-    if (service?.id && targetPage.id !== pageId) {
+    if (service && service.id && targetPage.id !== pageId) {
       await api(`/api/pages/${pageId}/services/${service.id}`, { method: "DELETE" });
       payload.id = service.id;
       const catalog = await api(`/api/pages/${targetPage.id}/services`, {
@@ -567,16 +569,16 @@ function ServiceModal({ page, pages, editing, onClose, onSaved }) {
       return;
     }
 
-    const path = service?.id ? `/api/pages/${pageId}/services/${service.id}` : `/api/pages/${targetPage.id}/services`;
+    const path = service && service.id ? `/api/pages/${pageId}/services/${service.id}` : `/api/pages/${targetPage.id}/services`;
     const catalog = await api(path, {
-      method: service?.id ? "PUT" : "POST",
+      method: service && service.id ? "PUT" : "POST",
       body: JSON.stringify(payload)
     });
     onSaved(catalog, targetPage.id);
   }
 
   async function deleteService() {
-    if (!service?.id) return;
+    if (!service || !service.id) return;
     setSaving(true);
     const catalog = await api(`/api/pages/${pageId}/services/${service.id}`, { method: "DELETE" });
     onSaved(catalog);
@@ -708,7 +710,7 @@ function App() {
     setLoadError("");
     const result = await loadCatalog();
     setCatalog(result.data);
-    setActivePageId((current) => current || result.data.pages[0]?.id);
+    setActivePageId((current) => current || (result.data.pages[0] && result.data.pages[0].id));
     setStaleCatalogMessage(result.stale ? `Showing last saved services because the live API did not respond: ${result.error}` : "");
   }
 
@@ -778,14 +780,16 @@ function App() {
   }, [query]);
 
   const activePage = useMemo(() => {
-    if (!catalog?.pages?.length) return null;
+    if (!catalog || !catalog.pages || !catalog.pages.length) return null;
     if (activePageId === "all") {
       return {
         id: "all",
         name: "All",
         description: "Every service",
-        services: catalog.pages.flatMap((page) =>
-          page.services.map((service) => ({ ...service, pageId: page.id, pageName: page.name }))
+        services: catalog.pages.reduce(
+          (services, page) =>
+            services.concat(page.services.map((service) => ({ ...service, pageId: page.id, pageName: page.name }))),
+          []
         )
       };
     }
@@ -800,15 +804,19 @@ function App() {
     }
     if (!normalizedQuery) return activePage.services;
     const sourcePages = activePage.id === "all" ? catalog.pages : [activePage];
-    return sourcePages.flatMap((page) =>
-      page.services
+    return sourcePages.reduce(
+      (services, page) =>
+        services.concat(
+          page.services
         .filter((service) => serviceSearchText(service, page).includes(normalizedQuery))
         .map((service) => ({ ...service, pageId: service.pageId || page.id, pageName: service.pageName || page.name }))
+        ),
+      []
     );
   }, [catalog, activePage, query, smartSearch]);
 
   const navPages = useMemo(() => {
-    if (!catalog?.pages?.length) return [];
+    if (!catalog || !catalog.pages || !catalog.pages.length) return [];
     const total = catalog.pages.reduce((count, page) => count + page.services.length, 0);
     return [{ id: "all", name: "All", description: "Every service", services: Array.from({ length: total }) }, ...catalog.pages];
   }, [catalog]);
