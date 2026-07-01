@@ -2,7 +2,7 @@
   "meta": {
     "title": "Landingpage",
     "source": "Imported from data/services.yaml",
-    "updatedAt": "2026-07-01T11:56:34.295Z"
+    "updatedAt": "2026-07-01T12:04:36.755Z"
   },
   "pages": [
     {
@@ -1810,6 +1810,25 @@
           ],
           "notes": "Imported from ChattoWeb.com. Search metadata seeded from service name, page, hostname, and description.",
           "widgetType": ""
+        },
+        {
+          "id": "docker-blue-57-129-129-85-8e821062",
+          "name": "Docker Blue - 57.129.129.85",
+          "href": "https://57.129.129.85:9090/",
+          "description": "Monitor and manage Docker containers.",
+          "icon": "docker-icon.png",
+          "tags": [
+            "OVH Cloud"
+          ],
+          "category": "OVH Cloud",
+          "keywords": [
+            "Docker",
+            "containers",
+            "OVH",
+            "cloud"
+          ],
+          "notes": "Access your Docker dashboard at the provided URL.",
+          "widgetType": "container"
         }
       ]
     }

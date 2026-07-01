@@ -1612,3 +1612,21 @@
             - server
             - release
             - com
+
+    - Docker Blue - 57.129.129.85:
+        href: https://57.129.129.85:9090/
+        description: Monitor and manage Docker containers.
+        icon: docker-icon.png
+        widget:
+          type: container
+        x-landingpage:
+          id: docker-blue-57-129-129-85-8e821062
+          category: OVH Cloud
+          notes: Access your Docker dashboard at the provided URL.
+          tags:
+            - OVH Cloud
+          keywords:
+            - Docker
+            - containers
+            - OVH
+            - cloud
