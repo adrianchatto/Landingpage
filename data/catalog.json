@@ -2,7 +2,7 @@
   "meta": {
     "title": "Landingpage",
     "source": "Imported from data/services.yaml",
-    "updatedAt": "2026-07-01T12:48:49.146Z"
+    "updatedAt": "2026-07-17T13:50:48.257Z"
   },
   "pages": [
     {
@@ -1716,6 +1716,25 @@
           ],
           "notes": "Useful for tracking RAM utilization and optimizing resource allocation.",
           "widgetType": "Gauge"
+        },
+        {
+          "id": "mortgage-calculator-e9108ca0",
+          "name": "Mortgage Calculator",
+          "href": "https://mortgage.chattoweb.com/",
+          "description": "Calculate monthly mortgage payments and total interest.",
+          "icon": "mortgage-calculator.png",
+          "tags": [
+            "Services"
+          ],
+          "category": "Services",
+          "keywords": [
+            "mortgage",
+            "calculator",
+            "finance",
+            "payments"
+          ],
+          "notes": "Useful for budgeting and financial planning.",
+          "widgetType": "calculator"
         }
       ]
     },

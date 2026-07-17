@@ -1537,6 +1537,24 @@
             - performance
             - Knowledge Base
 
+    - Mortgage Calculator:
+        href: https://mortgage.chattoweb.com/
+        description: Calculate monthly mortgage payments and total interest.
+        icon: mortgage-calculator.png
+        widget:
+          type: calculator
+        x-landingpage:
+          id: mortgage-calculator-e9108ca0
+          category: Services
+          notes: Useful for budgeting and financial planning.
+          tags:
+            - Services
+          keywords:
+            - mortgage
+            - calculator
+            - finance
+            - payments
+
 - Equipment:
     - My Equipment:
         href: https://app.notion.com/p/my-equiptment-38e25faf228881adb1bbde448be64ea9?source=copy_link
