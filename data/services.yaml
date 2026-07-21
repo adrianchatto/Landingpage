@@ -1555,6 +1555,22 @@
             - finance
             - payments
 
+    - SOW:
+        href: https://sow.chattoweb.com/
+        description: SOW service
+        icon: sow.png
+        x-landingpage:
+          id: sow-768d045b
+          category: Services
+          tags:
+            - Services
+          keywords:
+            - SOW
+            - sow.chattoweb.com
+            - Services
+            - sow
+            - services
+
 - Equipment:
     - My Equipment:
         href: https://app.notion.com/p/my-equiptment-38e25faf228881adb1bbde448be64ea9?source=copy_link

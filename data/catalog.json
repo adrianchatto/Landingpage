@@ -2,7 +2,7 @@
   "meta": {
     "title": "Landingpage",
     "source": "Imported from data/services.yaml",
-    "updatedAt": "2026-07-17T13:50:48.257Z"
+    "updatedAt": "2026-07-21T22:13:30.516Z"
   },
   "pages": [
     {
@@ -1735,6 +1735,26 @@
           ],
           "notes": "Useful for budgeting and financial planning.",
           "widgetType": "calculator"
+        },
+        {
+          "id": "sow-768d045b",
+          "name": "SOW",
+          "href": "https://sow.chattoweb.com/",
+          "description": "SOW service",
+          "icon": "sow.png",
+          "tags": [
+            "Services"
+          ],
+          "category": "Services",
+          "keywords": [
+            "SOW",
+            "sow.chattoweb.com",
+            "Services",
+            "sow",
+            "services"
+          ],
+          "notes": "",
+          "widgetType": ""
         }
       ]
     },
