@@ -2,7 +2,7 @@
   "meta": {
     "title": "Landingpage",
     "source": "Imported from data/services.yaml",
-    "updatedAt": "2026-07-21T22:13:30.516Z"
+    "updatedAt": "2026-07-21T22:28:05.663Z"
   },
   "pages": [
     {
@@ -1753,8 +1753,7 @@
             "sow",
             "services"
           ],
-          "notes": "",
-          "widgetType": ""
+          "notes": ""
         }
       ]
     },
